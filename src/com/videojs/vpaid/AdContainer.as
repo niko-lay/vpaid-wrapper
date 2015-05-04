@@ -19,14 +19,11 @@ import flash.external.ExternalInterface;
 
 public class AdContainer extends Sprite {
 
-  //private var _uiView: VideoJSView;
-  //private var _model: VideoJSModel;
-  private var _creativeContent:Array;
   private var _vpaidAd:*;
+  private var _creativeContent:Array;
   private var _adIsPlaying:Boolean = false;
-
-  private var _durationTimer:Timer;
   private var _adDuration:Number;
+  private var _durationTimer:Timer;
 
   public function AdContainer() {//(model: VideoJSModel){
     //_model = model;
@@ -54,55 +51,6 @@ public class AdContainer extends Sprite {
 
   public function init(adAssets:Array):void {
     _creativeContent = adAssets;
-  }
-
-  protected function startDurationTimer():void {
-    _durationTimer = new Timer(1000, _adDuration);
-    _durationTimer.addEventListener(TimerEvent.TIMER, adDurationTick);
-    _durationTimer.addEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
-    _durationTimer.start();
-  }
-
-
-  public function pausePlayingAd():void {
-    _adIsPlaying = false;
-    _durationTimer.stop();
-    _vpaidAd.pauseAd();
-  }
-
-  public function resumePlayingAd():void {
-    _adIsPlaying = true;
-    _durationTimer.start();
-    _vpaidAd.resumeAd();
-  }
-
-  public function adStarted():void {
-    _adIsPlaying = true;
-    startDurationTimer();
-    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStarted));
-    //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventStart);
-
-    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdImpression));
-    //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventImpression);
-
-  }
-
-  public function adLoaded():void {
-    addChild(_vpaidAd);
-    _vpaidAd.resizeAd(stage.width, stage.height, "normal");
-    _vpaidAd.startAd();
-    adStarted();
-  }
-
-  private function adError():void {
-    _vpaidAd.stopAd();
-    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
-  }
-
-  public function adStopped():void {
-    _adIsPlaying = false;
-    _vpaidAd = null;
-    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
   }
 
   public function loadAdAsset():void {
@@ -147,6 +95,54 @@ public class AdContainer extends Sprite {
 
     //TODO: get rid of hardcoded bitrate
     _vpaidAd.initAd(asset.width, asset.height, "normal", 800, "", "");
+  }
+
+  protected function startDurationTimer():void {
+    _durationTimer = new Timer(1000, _adDuration);
+    _durationTimer.addEventListener(TimerEvent.TIMER, adDurationTick);
+    _durationTimer.addEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
+    _durationTimer.start();
+  }
+
+  public function pausePlayingAd():void {
+    _adIsPlaying = false;
+    _durationTimer.stop();
+    _vpaidAd.pauseAd();
+  }
+
+  public function resumePlayingAd():void {
+    _adIsPlaying = true;
+    _durationTimer.start();
+    _vpaidAd.resumeAd();
+  }
+
+  public function adStarted():void {
+    _adIsPlaying = true;
+    startDurationTimer();
+    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStarted));
+    //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventStart);
+
+    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdImpression));
+    //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventImpression);
+
+  }
+
+  public function adLoaded():void {
+    addChild(_vpaidAd);
+    _vpaidAd.resizeAd(stage.width, stage.height, "normal");
+    _vpaidAd.startAd();
+    adStarted();
+  }
+
+  private function adError():void {
+    _vpaidAd.stopAd();
+    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
+  }
+
+  public function adStopped():void {
+    _adIsPlaying = false;
+    _vpaidAd = null;
+    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
   }
 
   private function adDurationTick(evt:Object):void {
