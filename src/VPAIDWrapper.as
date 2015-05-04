@@ -1,5 +1,6 @@
 package {
 
+import com.videojs.VideoJSModel;
 import com.videojs.WrapperApp;
 import com.videojs.events.VideoJSEvent;
 import com.videojs.structs.ExternalEventName;
@@ -96,8 +97,7 @@ public class VPAIDWrapper extends Sprite {
 
     if (loaderInfo.parameters.readyFunction != undefined) {
       try {
-        //ExternalInterface.call(_app.model.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
-        console.log('zomg');
+        ExternalInterface.call(VideoJSModel.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
       }
       catch (e:Error) {
         if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {

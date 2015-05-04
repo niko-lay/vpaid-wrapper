@@ -185,9 +185,9 @@ package com.videojs{
         public function get duration():Number{
             if(_provider){
 
-                if (adView.hasActiveAdAsset) {
-                    return adView.duration;
-                }
+                //if (adView.hasActiveAdAsset) {
+                //    return adView.duration;
+                //}
 
                 return _provider.duration;
             }
@@ -302,9 +302,9 @@ package com.videojs{
          */
         public function get time():Number{
             
-            if (adView.hasActiveAdAsset) {
-                return adView.remainingTime;
-            }
+            //if (adView.hasActiveAdAsset) {
+            //    return adView.remainingTime;
+            //}
 
             if(_provider){
                 return _provider.time;
@@ -582,7 +582,7 @@ package com.videojs{
          * Removes dangerous characters from a user-provided string that will be passed to ExternalInterface.call()
          *
          */
-        public function cleanEIString(pString:String):String{
+        public static function cleanEIString(pString:String):String{
             return pString.replace(/[^A-Za-z0-9_.]/gi, "");
         }
 
@@ -627,7 +627,7 @@ package com.videojs{
                         __src = {
                             path: _src
                         };
-                        _provider = new VPAIDAwareHTTPVideoProvider();
+                        _provider = new HTTPVideoProvider();
                         _provider.attachVideo(_videoReference);
                         _provider.init(__src, _autoplay);
                     }

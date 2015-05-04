@@ -1,6 +1,7 @@
 package com.videojs.vpaid {
 
 import com.videojs.*;
+import com.videojs.util.console;
 
 import flash.display.Loader;
 import flash.display.Sprite;
@@ -25,20 +26,8 @@ public class AdContainer extends Sprite {
   private var _adDuration:Number;
   private var _durationTimer:Timer;
 
-  public function AdContainer() {//(model: VideoJSModel){
-    //_model = model;
-  }
+  public function AdContainer() {
 
-  public function get hasPendingAdAsset():Boolean {
-    return _creativeContent.length > 0;
-  }
-
-  public function get hasActiveAdAsset():Boolean {
-    return _vpaidAd != null;
-  }
-
-  public function get hasPlayingAdAsset():Boolean {
-    return _adIsPlaying;
   }
 
   public function get duration():Number {
@@ -51,20 +40,15 @@ public class AdContainer extends Sprite {
 
   public function init(adAssets:Array):void {
     _creativeContent = adAssets;
-  }
-
-  public function loadAdAsset():void {
-    if (_creativeContent.length) {
-      var asset:Object = _creativeContent.shift();
-      loadCreative(asset);
-    }
+    var asset:Object = _creativeContent.shift();
+    loadCreative(asset);
   }
 
   private function loadCreative(asset:Object):void {
     var loader:Loader = new Loader();
     var loaderContext:LoaderContext = new LoaderContext();
     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (evt:Object):void {
-      succesfullCreativeLoad(evt, asset);
+      onCreativeLoaded(evt, asset);
     });
     loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR,
         function (evt:SecurityErrorEvent):void {
@@ -77,7 +61,7 @@ public class AdContainer extends Sprite {
     loader.load(new URLRequest(asset.path), loaderContext);
   }
 
-  private function succesfullCreativeLoad(evt:Object, asset:Object):void {
+  private function onCreativeLoaded(evt:Object, asset:Object):void {
     _vpaidAd = evt.target.content.getVPAID();
     _adDuration = asset.duration;
 
@@ -140,9 +124,12 @@ public class AdContainer extends Sprite {
   }
 
   public function adStopped():void {
-    _adIsPlaying = false;
-    _vpaidAd = null;
-    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
+    console.log('ZOMFG AD STOPPED');
+    if (_adIsPlaying) {
+      _adIsPlaying = false;
+      _vpaidAd = null;
+      dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
+    }
   }
 
   private function adDurationTick(evt:Object):void {

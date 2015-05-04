@@ -34,7 +34,6 @@ public class WrapperApp extends Sprite {
       creativeSource: ''
     });
     _uiView.adView.init(adAssets);
-    _uiView.adView.loadAdAsset()
   }
 }
 
