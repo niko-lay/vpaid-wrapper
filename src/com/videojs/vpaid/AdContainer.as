@@ -1,6 +1,7 @@
 package com.videojs.vpaid {
 
 import com.videojs.*;
+import com.videojs.events.VPAIDEvent;
 import com.videojs.util.JSInterface;
 import com.videojs.util.console;
 
@@ -14,7 +15,6 @@ import flash.net.NetStream;
 import flash.net.URLRequest;
 import flash.system.LoaderContext;
 
-import com.videojs.vpaid.events.VPAIDEvent;
 import com.videojs.structs.ExternalEventName;
 
 import flash.external.ExternalInterface;

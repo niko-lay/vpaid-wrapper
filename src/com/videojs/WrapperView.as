@@ -18,7 +18,7 @@ import flash.net.URLRequest;
 import flash.system.LoaderContext;
 
 import com.videojs.vpaid.AdContainer;
-import com.videojs.vpaid.events.VPAIDEvent;
+import com.videojs.events.VPAIDEvent;
 
 import mx.formatters.NumberBase;
 
@@ -61,12 +61,12 @@ public class WrapperView extends Sprite {
     return _adView;
   }
 
-  private function onBackgroundColorSet(e:VideoPlaybackEvent):void {
+/*  private function onBackgroundColorSet(e:VideoPlaybackEvent):void {
     _uiBackground.graphics.clear();
     _uiBackground.graphics.beginFill(1, 1);
     _uiBackground.graphics.drawRect(0, 0, _stageWidth, _stageHeight);
     _uiBackground.graphics.endFill();
-  }
+  }*/
 
   private function onStageResize(e:VideoJSEvent):void {
     _stageWidth = e.data.width;
@@ -83,13 +83,10 @@ public class WrapperView extends Sprite {
     //_uiPosterImage.visible = false;
   }
 
-  private function onMetaData(e:VideoPlaybackEvent):void {
-    //sizeVideoObject();
-  }
 
-  private function onDimensionUpdate(e:VideoPlaybackEvent):void {
+  //private function onDimensionUpdate(e:VideoPlaybackEvent):void {
     //sizeVideoObject();
-  }
+  //}
 }
 
 }

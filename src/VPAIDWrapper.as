@@ -4,7 +4,6 @@ import com.videojs.WrapperApp;
 import com.videojs.events.VideoJSEvent;
 import com.videojs.structs.ExternalEventName;
 import com.videojs.structs.ExternalErrorEventName;
-import com.videojs.Base64;
 import com.videojs.util.JSInterface;
 import com.videojs.util.console;
 
