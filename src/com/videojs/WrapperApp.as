@@ -28,6 +28,7 @@ public class WrapperApp extends Sprite {
       path: adSrc,
       width: width,
       height: height,
+      bitrate: 800,
       type: 'application/x-shockwave-flash',
       duration: 30,
       creativeSource: ''
