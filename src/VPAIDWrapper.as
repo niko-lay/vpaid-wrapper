@@ -69,9 +69,9 @@ public class VPAIDWrapper extends Sprite {
   private function registerExternalMethods():void {
 
     try {
-      ExternalInterface.addCallback("vjs_echo", onEchoCalled);
-      ExternalInterface.addCallback("vjs_getProperty", onGetPropertyCalled);
-      ExternalInterface.addCallback("vjs_setProperty", onSetPropertyCalled);
+      ExternalInterface.addCallback("vwEcho", onEchoCalled);
+      ExternalInterface.addCallback("vwGetProperty", onGetPropertyCalled);
+      ExternalInterface.addCallback("vwSetProperty", onSetPropertyCalled);
     }
     catch (e:SecurityError) {
       if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
@@ -85,10 +85,7 @@ public class VPAIDWrapper extends Sprite {
     }
     finally {
     }
-
-
     setTimeout(finish, 50);
-
   }
 
   private function finish():void {
