@@ -6,6 +6,8 @@ package com.videojs{
     import flash.display.Bitmap;
     import flash.display.Loader;
     import flash.display.Sprite;
+    import flash.display.StageAlign;
+    import flash.display.StageScaleMode;
     import flash.events.Event;
     import flash.events.IOErrorEvent;
     import flash.events.SecurityErrorEvent;
@@ -20,54 +22,63 @@ package com.videojs{
     public class VideoJSView extends Sprite{
         
         private var _uiVideo:Video;
+        private var _adView:AdContainer;
         private var _uiPosterContainer:Sprite;
         private var _uiPosterImage:Loader;
         private var _uiBackground:Sprite;
         
-        private var _model:VideoJSModel;
+        //private var _model:VideoJSModel;
         
         public function VideoJSView(){
             
-            _model = VideoJSModel.getInstance();
-            _model.addEventListener(VideoJSEvent.POSTER_SET, onPosterSet);
-            _model.addEventListener(VideoJSEvent.BACKGROUND_COLOR_SET, onBackgroundColorSet);
-            _model.addEventListener(VideoJSEvent.STAGE_RESIZE, onStageResize);
-            _model.addEventListener(VideoPlaybackEvent.ON_STREAM_START, onStreamStart);
-            _model.addEventListener(VideoPlaybackEvent.ON_META_DATA, onMetaData);
-            _model.addEventListener(VideoPlaybackEvent.ON_VIDEO_DIMENSION_UPDATE, onDimensionUpdate);
-            
-            _uiBackground = new Sprite();
-            _uiBackground.graphics.beginFill(_model.backgroundColor, 1);
-            _uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
-            _uiBackground.graphics.endFill();
-            _uiBackground.alpha = _model.backgroundAlpha;
-            addChild(_uiBackground);
-            
-            _uiPosterContainer = new Sprite();
-            _uiPosterImage = new Loader();
-            _uiPosterImage.visible = false;
-            _uiPosterContainer.addChild(_uiPosterImage);
-            
-            addChild(_uiPosterContainer);
-            
-            _uiVideo = new Video();
-            _uiVideo.width = _model.stageRect.width;
-            _uiVideo.height = _model.stageRect.height;
-            _uiVideo.smoothing = true;
-            addChild(_uiVideo);
+            //_model = VideoJSModel.getInstance();
+            //_model.addEventListener(VideoJSEvent.POSTER_SET, onPosterSet);
+            //_model.addEventListener(VideoJSEvent.BACKGROUND_COLOR_SET, onBackgroundColorSet);
+            //_model.addEventListener(VideoJSEvent.STAGE_RESIZE, onStageResize);
+            //_model.addEventListener(VideoPlaybackEvent.ON_STREAM_START, onStreamStart);
+            //_model.addEventListener(VideoPlaybackEvent.ON_META_DATA, onMetaData);
+            //_model.addEventListener(VideoPlaybackEvent.ON_VIDEO_DIMENSION_UPDATE, onDimensionUpdate);
 
-            _model.adView = new AdContainer(_model);
-            _model.adView.addEventListener(VPAIDEvent.AdLoaded, onAdStart);
-            addChild(_model.adView);
+            _uiBackground = new Sprite();
+            _uiBackground.graphics.beginFill(1,1);//_model.backgroundColor, 1);
+            //_uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
+            _uiBackground.graphics.drawRect(0, 0, 640, 460);
+            _uiBackground.graphics.endFill();
+            _uiBackground.alpha = 0;//_model.backgroundAlpha;
+            addChild(_uiBackground);
+
+            //_uiPosterContainer = new Sprite();
+            //_uiPosterImage = new Loader();
+            //_uiPosterImage.visible = false;
+            //_uiPosterContainer.addChild(_uiPosterImage);
+            //
+            //addChild(_uiPosterContainer);
+            //
+            //_uiVideo = new Video();
+            //_uiVideo.width = _model.stageRect.width;
+            //_uiVideo.height = _model.stageRect.height;
+            //_uiVideo.smoothing = true;
+            //addChild(_uiVideo);
+
+            _adView = new AdContainer();
+            _adView.addEventListener(VPAIDEvent.AdLoaded, onAdStart);
+            addChild(_adView);
+
+            //_model.adView.x = Math.round((_model.stageRect.width - _uiVideo.width) / 2);
+            //_model.adView.y = Math.round((_model.stageRect.height - _uiVideo.height) / 2);
             
-            _model.videoReference = _uiVideo;
-            
+            //_model.videoReference = _uiVideo;
+
+        }
+
+        public function get adView():AdContainer {
+            return _adView;
         }
         
-        /**
+/*        *//**
          * Loads the poster frame, if one has been specified. 
          * 
-         */        
+         *//*
         private function loadPoster():void{
             if(_model.poster != ""){
                 if(_uiPosterImage != null){
@@ -176,26 +187,30 @@ package com.videojs{
             catch(e:Error){
                 
             }
-        }
+        }*/
 
         private function onBackgroundColorSet(e:VideoPlaybackEvent):void{
             _uiBackground.graphics.clear();
-            _uiBackground.graphics.beginFill(_model.backgroundColor, 1);
-            _uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
+            //_uiBackground.graphics.beginFill(_model.backgroundColor, 1);
+            _uiBackground.graphics.beginFill(1, 1);
+            //_uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
+            _uiBackground.graphics.drawRect(0, 0, stage.width, stage.height);
             _uiBackground.graphics.endFill();
         }
         
         private function onStageResize(e:VideoJSEvent):void{
             
             _uiBackground.graphics.clear();
-            _uiBackground.graphics.beginFill(_model.backgroundColor, 1);
-            _uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
+            //_uiBackground.graphics.beginFill(_model.backgroundColor, 1);
+            _uiBackground.graphics.beginFill(1, 1);
+            //_uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
+            _uiBackground.graphics.drawRect(0, 0, stage.width, stage.height);
             _uiBackground.graphics.endFill();
-            sizePoster();
-            sizeVideoObject();
+            //sizePoster();
+            //sizeVideoObject();
         }
         
-        private function onPosterSet(e:VideoJSEvent):void{
+/*        private function onPosterSet(e:VideoJSEvent):void{
             loadPoster();
         }
         
@@ -229,18 +244,18 @@ package com.videojs{
         
         private function onStreamStart(e:VideoPlaybackEvent):void{
             _uiPosterImage.visible = false;
-        }
+        }*/
 
         private function onAdStart(e:Object):void {
             _uiPosterImage.visible = false;
         }
         
         private function onMetaData(e:VideoPlaybackEvent):void{        
-            sizeVideoObject();
+            //sizeVideoObject();
         }
 
         private function onDimensionUpdate(e:VideoPlaybackEvent):void{
-            sizeVideoObject();
+            //sizeVideoObject();
         }
         
     }

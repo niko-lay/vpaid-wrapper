@@ -1,5 +1,7 @@
 module.exports = function (grunt) {
 
+  require('load-grunt-tasks')(grunt)
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     connect: {
@@ -163,6 +165,18 @@ module.exports = function (grunt) {
           ]
         }
       },
+    },
+    copy: {
+      target: {
+        files: [
+          {
+            cwd: 'dist',
+            expand: true,
+            dest: '../gbox-video-player-tester',
+            src: ["**"]
+          }
+        ]
+      }
     }
   });
 
@@ -174,7 +188,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-prompt');
   grunt.loadNpmTasks('chg');
 
-  grunt.registerTask('dist', ['mxmlc']);
+  grunt.registerTask('dist', ['mxmlc', 'copy']);
   grunt.registerTask('default', ['dist']);
 
   grunt.registerMultiTask('mxmlc', 'Compiling SWF', function () {

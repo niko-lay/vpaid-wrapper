@@ -18,7 +18,7 @@ package com.videojs.vpaid {
     public class AdContainer extends Sprite {
         
         private var _uiView: VideoJSView;
-        private var _model: VideoJSModel;
+        //private var _model: VideoJSModel;
         private var _creativeContent: Array;
         private var _vpaidAd: *;
         private var _adIsPlaying: Boolean = false;
@@ -26,8 +26,8 @@ package com.videojs.vpaid {
         private var _durationTimer: Timer;
         private var _adDuration: Number;
         
-        public function AdContainer(model: VideoJSModel){
-            _model = model;
+        public function AdContainer() {//(model: VideoJSModel){
+            //_model = model;
         }
 
         public function get hasPendingAdAsset(): Boolean {
@@ -78,10 +78,10 @@ package com.videojs.vpaid {
             _adIsPlaying = true;
             startDurationTimer();
             dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStarted));
-            _model.broadcastEventExternally(VPAIDEvent.AdPluginEventStart);
+            //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventStart);
 
             dispatchEvent(new VPAIDEvent(VPAIDEvent.AdImpression));
-            _model.broadcastEventExternally(VPAIDEvent.AdPluginEventImpression);
+            //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventImpression);
 
         }
         
@@ -148,12 +148,12 @@ package com.videojs.vpaid {
         }
 
         private function adDurationTick(evt: Object): void {
-            _model.broadcastEventExternally(VPAIDEvent.AdPluginEventTimeRemaining); 
+            //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventTimeRemaining);
 
             ExternalInterface.call("console.log", _vpaidAd.adSkippableState)
 
             if (_vpaidAd.adSkippableState) {
-                _model.broadcastEventExternally(VPAIDEvent.AdPluginEventCanSkip); 
+                //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventCanSkip);
             }
 
         }

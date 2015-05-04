@@ -48,22 +48,22 @@ package{
             if(ExternalInterface.available){
                 registerExternalMethods();
             }
-            
-            _app = new VideoJSApp();
+            ExternalInterface.call('console.log', '!!!! adsrc = ' + loaderInfo.parameters.adsrc);
+            _app = new VideoJSApp(loaderInfo.parameters.adsrc);
             
             addChild(_app);
 
-            _app.model.stageRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+            //_app.model.stageRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 
             // add content-menu version info
 
             var _ctxVersion:ContextMenuItem = new ContextMenuItem("VideoJS Flash Component v" + VERSION, false, false);
-            var _ctxAbout:ContextMenuItem = new ContextMenuItem("Copyright © 2014 Brightcove, Inc.", false, false);
+            var _ctxAbout:ContextMenuItem = new ContextMenuItem("Copyright © 2014 JP Ventures, LTD.", false, false);
             var _ctxMenu:ContextMenu = new ContextMenu();
             _ctxMenu.hideBuiltInItems();
             _ctxMenu.customItems.push(_ctxVersion, _ctxAbout);
             this.contextMenu = _ctxMenu;
-            
+
             _app.init();
 
         }
@@ -71,20 +71,9 @@ package{
         private function registerExternalMethods():void{
             
             try{
-                ExternalInterface.addCallback("vjs_appendBuffer", onAppendBufferCalled);
                 ExternalInterface.addCallback("vjs_echo", onEchoCalled);
-                ExternalInterface.addCallback("vjs_endOfStream", onEndOfStreamCalled);
-                ExternalInterface.addCallback("vjs_abort", onAbortCalled);
-
                 ExternalInterface.addCallback("vjs_getProperty", onGetPropertyCalled);
                 ExternalInterface.addCallback("vjs_setProperty", onSetPropertyCalled);
-                ExternalInterface.addCallback("vjs_autoplay", onAutoplayCalled);
-                ExternalInterface.addCallback("vjs_src", onSrcCalled);
-                ExternalInterface.addCallback("vjs_load", onLoadCalled);
-                ExternalInterface.addCallback("vjs_play", onPlayCalled);
-                ExternalInterface.addCallback("vjs_pause", onPauseCalled);
-                ExternalInterface.addCallback("vjs_resume", onResumeCalled);
-                ExternalInterface.addCallback("vjs_stop", onStopCalled);
             }
             catch(e:SecurityError){
                 if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
@@ -105,48 +94,11 @@ package{
         }
         
         private function finish():void{
-            
-            if(loaderInfo.parameters.mode != undefined){
-                _app.model.mode = loaderInfo.parameters.mode;
-            }
-            
-            if(loaderInfo.parameters.eventProxyFunction != undefined){
-                _app.model.jsEventProxyName = loaderInfo.parameters.eventProxyFunction;
-            }
-            
-            if(loaderInfo.parameters.errorEventProxyFunction != undefined){
-                _app.model.jsErrorEventProxyName = loaderInfo.parameters.errorEventProxyFunction;
-            }
-            
-            if(loaderInfo.parameters.autoplay != undefined && loaderInfo.parameters.autoplay == "true"){
-                _app.model.autoplay = true;
-            }
-            
-            if(loaderInfo.parameters.preload === "none"){
-                _app.model.preload = false;
-            }
-            
-            if(loaderInfo.parameters.poster != undefined && loaderInfo.parameters.poster != ""){
-                _app.model.poster = String(loaderInfo.parameters.poster);
-            }
-            
-            if(loaderInfo.parameters.src != undefined && loaderInfo.parameters.src != ""){
-              if (isExternalMSObjectURL(loaderInfo.parameters.src)) {
-                _app.model.srcFromFlashvars = null;
-                openExternalMSObject(loaderInfo.parameters.src);
-              } else {
-                _app.model.srcFromFlashvars = String(loaderInfo.parameters.src);
-              }
-            } else{
-              if(loaderInfo.parameters.rtmpConnection != undefined && loaderInfo.parameters.rtmpConnection != ""){
-                _app.model.rtmpConnectionURL = loaderInfo.parameters.rtmpConnection;
-              }
 
-              if(loaderInfo.parameters.rtmpStream != undefined && loaderInfo.parameters.rtmpStream != ""){
-                _app.model.rtmpStream = loaderInfo.parameters.rtmpStream;
-              }
+            if(loaderInfo.parameters.src != undefined && loaderInfo.parameters.src != "") {
+               // _app.model.srcFromFlashvars = String(loaderInfo.parameters.src);
             }
-            
+
             if(loaderInfo.parameters.readyFunction != undefined){
                 try{
                     ExternalInterface.call(_app.model.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
@@ -157,12 +109,8 @@ package{
                     }
                 }
             }
-            
-            if (loaderInfo.parameters.adMetadataSource != undefined) {
-                _app.model.prerollAdMetadata = loaderInfo.parameters.adMetadataSource;
-            }
-            
-            _app.model.broadcastEvent(new VideoJSEvent(VideoJSEvent.INIT_DONE, {}));
+
+            //_app.model.broadcastEvent(new VideoJSEvent(VideoJSEvent.INIT_DONE, {}));
         }
         
         private function onAddedToStage(e:Event):void{
@@ -183,114 +131,21 @@ package{
         
         private function onStageResize(e:Event):void{
             if(_app != null){
-                _app.model.stageRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-                _app.model.broadcastEvent(new VideoJSEvent(VideoJSEvent.STAGE_RESIZE, {}));
+                //_app.model.stageRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
+                //_app.model.broadcastEvent(new VideoJSEvent(VideoJSEvent.STAGE_RESIZE, {}));
             }
         }
 
-        private function onAppendBufferCalled(base64str:String):void{
-            var bytes:ByteArray = Base64.decode(base64str);
-
-            // write the bytes to the provider
-            _app.model.appendBuffer(bytes);
-        }
-        
         private function onEchoCalled(pResponse:* = null):*{
             return pResponse;
         }
 
-        private function onEndOfStreamCalled():*{
-            _app.model.endOfStream();
-        }
-
-        private function onAbortCalled():*{
-            _app.model.abort();
-        }
-        
         private function onGetPropertyCalled(pPropertyName:String = ""):*{
 
             switch(pPropertyName){
                 case "mode":
-                    return _app.model.mode;
-                case "autoplay":
-                    return _app.model.autoplay;
-                case "loop":
-                    return _app.model.loop;
-                case "preload":
-                    return _app.model.preload;    
                     break;
-                case "metadata":
-                    return _app.model.metadata;
-                    break;
-                case "duration":
-                    return _app.model.duration;
-                    break;
-                case "eventProxyFunction":
-                    return _app.model.jsEventProxyName;
-                    break;
-                case "errorEventProxyFunction":
-                    return _app.model.jsErrorEventProxyName;
-                    break;
-                case "currentSrc":
-                    return _app.model.src;
-                    break;
-                case "currentTime":
-                    return _app.model.time;
-                    break;
-                case "time":
-                    return _app.model.time;
-                    break;
-                case "initialTime":
-                    return 0;
-                    break;
-                case "defaultPlaybackRate":
-                    return 1;
-                    break;
-                case "ended":
-                    return _app.model.hasEnded;
-                    break;
-                case "volume":
-                    return _app.model.volume;
-                    break;
-                case "muted":
-                    return _app.model.muted;
-                    break;
-                case "paused":
-                    return _app.model.paused;
-                    break;
-                case "seeking":
-                    return _app.model.seeking;
-                    break;
-                case "networkState":
-                    return _app.model.networkState;
-                    break;
-                case "readyState":
-                    return _app.model.readyState;
-                    break;
-                case "buffered":
-                    return _app.model.buffered;
-                    break;
-                case "bufferedBytesStart":
-                    return 0;
-                    break;
-                case "bufferedBytesEnd":
-                    return _app.model.bufferedBytesEnd;
-                    break;
-                case "bytesTotal":
-                    return _app.model.bytesTotal;
-                    break;
-                case "videoWidth":
-                    return _app.model.videoWidth;
-                    break;
-                case "videoHeight":
-                    return _app.model.videoHeight;
-                    break;
-                case "rtmpConnection":
-                    return _app.model.rtmpConnectionURL;
-                    break;     
-                case "rtmpStream":
-                    return _app.model.rtmpStream;
-                    break;                                       
+                    //return _app.model.mode;
             }
             return null;
         }
@@ -298,113 +153,12 @@ package{
         private function onSetPropertyCalled(pPropertyName:String = "", pValue:* = null):void{
             switch(pPropertyName){
                 case "duration":
-                    _app.model.duration = Number(pValue);
-                    break;
-                case "mode":
-                    _app.model.mode = String(pValue);
-                    break;
-                case "loop":
-                    _app.model.loop = _app.model.humanToBoolean(pValue);
-                    break;
-                case "background":
-                    _app.model.backgroundColor = _app.model.hexToNumber(String(pValue));
-                    _app.model.backgroundAlpha = 1;
-                    break;
-                case "eventProxyFunction":
-                    _app.model.jsEventProxyName = String(pValue);
-                    break;
-                case "errorEventProxyFunction":
-                    _app.model.jsErrorEventProxyName = String(pValue);
-                    break;
-                case "autoplay":
-                    _app.model.autoplay = _app.model.humanToBoolean(pValue);
-                case "preload":
-                    _app.model.preload = _app.model.humanToBoolean(pValue);
-                    break;
-                case "poster":
-                    _app.model.poster = String(pValue);
-                    break;
-                case "src":
-                    // same as when vjs_src() is called directly
-                    onSrcCalled(pValue);
-                    break;
-                case "currentTime":
-                    if (_app.model.adView.hasActiveAdAsset) { return; }
-                    _app.model.seekBySeconds(Number(pValue));
-                    break;
-                case "currentPercent":
-                    if (_app.model.adView.hasActiveAdAsset) { return; }
-                    _app.model.seekByPercent(Number(pValue));
-                    break;
-                case "muted":
-                    _app.model.muted = _app.model.humanToBoolean(pValue);
-                    break;
-                case "volume":
-                    _app.model.volume = Number(pValue);
-                    break;
-                case "rtmpConnection":
-                    _app.model.rtmpConnectionURL = String(pValue);
-                    break;
-                case "rtmpStream":
-                    _app.model.rtmpStream = String(pValue);
+                    //_app.model.duration = Number(pValue);
                     break;
                 default:
-                    _app.model.broadcastErrorEventExternally(ExternalErrorEventName.PROPERTY_NOT_FOUND, pPropertyName);
+                    //_app.model.broadcastErrorEventExternally(ExternalErrorEventName.PROPERTY_NOT_FOUND, pPropertyName);
                     break;
             }
-        }
-        
-        private function onAutoplayCalled(pAutoplay:* = false):void{
-          _app.model.autoplay = _app.model.humanToBoolean(pAutoplay);
-        }
-
-        private function isExternalMSObjectURL(pSrc:*):Boolean{
-          return pSrc.indexOf('blob:vjs-media-source/') === 0;
-        }
-
-        private function openExternalMSObject(pSrc:*):void{
-          var cleanSrc:String
-          if (/^blob:vjs-media-source\/\d+$/.test(pSrc)) {
-            cleanSrc = pSrc;
-          } else {
-            cleanSrc = _app.model.cleanEIString(pSrc);
-          }
-          ExternalInterface.call('videojs.MediaSource.open', cleanSrc, ExternalInterface.objectID);
-        }
-        
-        private function onSrcCalled(pSrc:* = ""):void{
-          // check if an external media source object will provide the video data
-          if (isExternalMSObjectURL(pSrc)) {
-            // null is passed to the netstream which enables appendBytes mode
-            _app.model.src = null;
-            // open the media source object for creating a source buffer
-            // and provide a reference to this swf for passing data from the soure buffer
-            openExternalMSObject(pSrc);
-
-            // ExternalInterface.call('videojs.MediaSource.sourceBufferUrls["' + pSrc + '"]', ExternalInterface.objectID);
-          } else {
-            _app.model.src = String(pSrc);
-          }
-        }
-        
-        private function onLoadCalled():void{
-            _app.model.load();
-        }
-        
-        private function onPlayCalled():void{
-            _app.model.play();
-        }
-        
-        private function onPauseCalled():void{
-            _app.model.pause();
-        }
-        
-        private function onResumeCalled():void{
-            _app.model.resume();
-        }
-        
-        private function onStopCalled():void{
-            _app.model.stop();
         }
         
         private function onUncaughtError(e:Event):void{
@@ -412,7 +166,7 @@ package{
         }
 
         private function onStageClick(e:MouseEvent):void{
-            _app.model.broadcastEventExternally(ExternalEventName.ON_STAGE_CLICK);
+            //_app.model.broadcastEventExternally(ExternalEventName.ON_STAGE_CLICK);
         }
         
     }
