@@ -20,20 +20,20 @@ package com.videojs {
 
     }
 
-    public function init(adSrc:String, width, height):void {
-      console.log('ZOMG CONSOLE.LOG!');
+    public function init(adSrc:String, width:int, height:int):void {
       _uiView = new WrapperView(width, height);
       addChild(_uiView);
-      var adSource:Array = [];
-      adSource.push({
+      //
+      var adAssets:Array = [];
+      adAssets.push({
         path: adSrc,
-        height: 460,
-        width: 640,
+        width: width,
+        height: height,
         type: 'application/x-shockwave-flash',
         duration: 30,
         creativeSource: ''
       });
-      _uiView.adView.init(adSource);
+      _uiView.adView.init(adAssets);
       _uiView.adView.loadAdAsset()
     }
 

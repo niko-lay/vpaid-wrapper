@@ -21,12 +21,9 @@ package com.videojs {
 
 import mx.formatters.NumberBase;
 
-public class WrapperView extends Sprite{
-        
-        private var _uiVideo:Video;
+public class WrapperView extends Sprite {
+
         private var _adView:AdContainer;
-        private var _uiPosterContainer:Sprite;
-        private var _uiPosterImage:Loader;
         private var _uiBackground:Sprite;
         
         //private var _model:VideoJSModel;
@@ -249,7 +246,7 @@ public class WrapperView extends Sprite{
         }*/
 
         private function onAdStart(e:Object):void {
-            _uiPosterImage.visible = false;
+            //_uiPosterImage.visible = false;
         }
         
         private function onMetaData(e:VideoPlaybackEvent):void{        

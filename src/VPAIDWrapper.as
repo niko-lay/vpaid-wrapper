@@ -102,7 +102,8 @@ package {
 
             if(loaderInfo.parameters.readyFunction != undefined){
                 try{
-                    ExternalInterface.call(_app.model.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
+                    //ExternalInterface.call(_app.model.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
+                  console.log('zomg');
                 }
                 catch(e:Error){
                     if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
