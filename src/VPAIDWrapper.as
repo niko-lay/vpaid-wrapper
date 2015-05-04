@@ -1,10 +1,11 @@
-package{
+package {
     
-    import com.videojs.VideoJSApp;
+    import com.videojs.WrapperApp;
     import com.videojs.events.VideoJSEvent;
     import com.videojs.structs.ExternalEventName;
     import com.videojs.structs.ExternalErrorEventName;
     import com.videojs.Base64;
+    import com.videojs.util.console;
 
     import flash.display.Sprite;
     import flash.display.StageAlign;
@@ -22,14 +23,14 @@ package{
     import flash.utils.setTimeout;
     
     [SWF(backgroundColor="#000000", frameRate="60", width="480", height="270")]
-    public class VideoJS extends Sprite{
+    public class VPAIDWrapper extends Sprite {
 
         public const VERSION:String = CONFIG::version;
         
-        private var _app:VideoJSApp;
+        private var _app:WrapperApp;
         private var _stageSizeTimer:Timer;
         
-        public function VideoJS(){
+        public function VPAIDWrapper(){
             _stageSizeTimer = new Timer(250);
             _stageSizeTimer.addEventListener(TimerEvent.TIMER, onStageSizeTimerTick);
             addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -48,8 +49,8 @@ package{
             if(ExternalInterface.available){
                 registerExternalMethods();
             }
-            ExternalInterface.call('console.log', '!!!! adsrc = ' + loaderInfo.parameters.adsrc);
-            _app = new VideoJSApp(loaderInfo.parameters.adsrc);
+            console.log('AD SOURCE', loaderInfo.parameters.src);
+            _app = new WrapperApp();
             
             addChild(_app);
 
@@ -57,14 +58,14 @@ package{
 
             // add content-menu version info
 
-            var _ctxVersion:ContextMenuItem = new ContextMenuItem("VideoJS Flash Component v" + VERSION, false, false);
-            var _ctxAbout:ContextMenuItem = new ContextMenuItem("Copyright © 2014 JP Ventures, LTD.", false, false);
+            var _ctxVersion:ContextMenuItem = new ContextMenuItem("VPAID Wrapper v" + VERSION, false, false);
+            var _ctxAbout:ContextMenuItem = new ContextMenuItem("Copyright © 2015 JP Ventures, LTD.", false, false);
             var _ctxMenu:ContextMenu = new ContextMenu();
             _ctxMenu.hideBuiltInItems();
             _ctxMenu.customItems.push(_ctxVersion, _ctxAbout);
             this.contextMenu = _ctxMenu;
 
-            _app.init();
+            _app.init(loaderInfo.parameters.src, stage.stageWidth, stage.stageHeight);
 
         }
         

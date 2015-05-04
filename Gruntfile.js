@@ -15,13 +15,13 @@ module.exports = function (grunt) {
         // http://livedocs.adobe.com/flex/3/html/help.html?content=compilers_16.html
         metadata: {
           // `-title "Adobe Flex Application"`
-          title: 'VideoJS SWF',
+          title: 'VPAID Wrapper',
           // `-description "http://www.adobe.com/flex"`
-          description: 'http://www.videojs.com',
+          description: 'http://www.gbox.com',
           // `-publisher "The Publisher"`
-          publisher: 'Brightcove, Inc.',
+          publisher: 'OnCircle, Inc.',
           // `-creator "The Author"`
-          creator: 'Brightcove, Inc.',
+          creator: 'OnCircle, Inc.',
           // `-language=EN`
           // `-language+=klingon`
           language: 'EN',
@@ -112,9 +112,9 @@ module.exports = function (grunt) {
           'incremental': false
         }
       },
-      videojs_swf: {
+      vpaid_wrapper_swf: {
         files: {
-          'dist/video-js.swf': ['src/VideoJS.as'],
+          'dist/vpaid-wrapper.swf': ['src/VPAIDWrapper.as'],
           'sandbox/exampleadvpaid2.swf': ['sandbox/exampleAd/ExampleVPAID.as']
         }
       }
@@ -164,7 +164,7 @@ module.exports = function (grunt) {
             }
           ]
         }
-      },
+      }
     },
     copy: {
       target: {

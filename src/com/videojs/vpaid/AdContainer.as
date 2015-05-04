@@ -17,7 +17,7 @@ package com.videojs.vpaid {
 
     public class AdContainer extends Sprite {
         
-        private var _uiView: VideoJSView;
+        //private var _uiView: VideoJSView;
         //private var _model: VideoJSModel;
         private var _creativeContent: Array;
         private var _vpaidAd: *;

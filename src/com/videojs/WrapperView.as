@@ -1,4 +1,4 @@
-package com.videojs{
+package com.videojs {
     
     import com.videojs.events.*;
     import com.videojs.structs.ExternalErrorEventName;
@@ -18,8 +18,10 @@ package com.videojs{
     import flash.system.LoaderContext;
     import com.videojs.vpaid.AdContainer;
     import com.videojs.vpaid.events.VPAIDEvent;
-    
-    public class VideoJSView extends Sprite{
+
+import mx.formatters.NumberBase;
+
+public class WrapperView extends Sprite{
         
         private var _uiVideo:Video;
         private var _adView:AdContainer;
@@ -29,7 +31,7 @@ package com.videojs{
         
         //private var _model:VideoJSModel;
         
-        public function VideoJSView(){
+        public function WrapperView(width:int, height:int){
             
             //_model = VideoJSModel.getInstance();
             //_model.addEventListener(VideoJSEvent.POSTER_SET, onPosterSet);
@@ -42,7 +44,7 @@ package com.videojs{
             _uiBackground = new Sprite();
             _uiBackground.graphics.beginFill(1,1);//_model.backgroundColor, 1);
             //_uiBackground.graphics.drawRect(0, 0, _model.stageRect.width, _model.stageRect.height);
-            _uiBackground.graphics.drawRect(0, 0, 640, 460);
+            _uiBackground.graphics.drawRect(0, 0, width, height);
             _uiBackground.graphics.endFill();
             _uiBackground.alpha = 0;//_model.backgroundAlpha;
             addChild(_uiBackground);
