@@ -3,7 +3,6 @@ package com.videojs {
 import flash.display.Sprite;
 
 import com.videojs.vpaid.AdContainer;
-import com.videojs.util.CreativeSourceLoader;
 import com.videojs.events.VideoJSEvent;
 
 import flash.external.ExternalInterface;

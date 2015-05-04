@@ -1,11 +1,11 @@
 package {
 
-import com.videojs.VideoJSModel;
 import com.videojs.WrapperApp;
 import com.videojs.events.VideoJSEvent;
 import com.videojs.structs.ExternalEventName;
 import com.videojs.structs.ExternalErrorEventName;
 import com.videojs.Base64;
+import com.videojs.util.JSInterface;
 import com.videojs.util.console;
 
 import flash.display.Sprite;
@@ -97,7 +97,7 @@ public class VPAIDWrapper extends Sprite {
 
     if (loaderInfo.parameters.readyFunction != undefined) {
       try {
-        ExternalInterface.call(VideoJSModel.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
+        ExternalInterface.call(JSInterface.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
       }
       catch (e:Error) {
         if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {

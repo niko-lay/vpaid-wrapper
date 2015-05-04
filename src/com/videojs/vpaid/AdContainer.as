@@ -1,6 +1,7 @@
 package com.videojs.vpaid {
 
 import com.videojs.*;
+import com.videojs.util.JSInterface;
 import com.videojs.util.console;
 
 import flash.display.Loader;
@@ -129,6 +130,7 @@ public class AdContainer extends Sprite {
       _adIsPlaying = false;
       _vpaidAd = null;
       dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
+      JSInterface.broadcast(VPAIDEvent.AdStopped);
     }
   }
 
