@@ -57,7 +57,7 @@ public class VPAIDWrapper extends Sprite {
     }
     // Initialize and add application to stage
     _app = new WrapperApp();
-    _app.init(loaderInfo.parameters.src, stage.stageWidth, stage.stageHeight);
+    _app.init(loaderInfo.parameters.src, stage.stageWidth, stage.stageHeight, loaderInfo.parameters.adDuration, loaderInfo.parameters.adBitrate);
     addChild(_app);
     // Notify wrapper's container
     notifyReady();
