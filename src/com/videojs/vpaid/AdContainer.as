@@ -94,6 +94,7 @@ public class AdContainer extends Sprite {
   private function adLoaded():void {
     // Add ad unit to stage
     addChild(_ad.displayObject);
+    JSInterface.broadcast(VPAIDEvent.AdLoaded);
     // Resize to current stage values and then start
     _ad.resizeAd(stage.width, stage.height, "normal");
     _ad.startAd();
