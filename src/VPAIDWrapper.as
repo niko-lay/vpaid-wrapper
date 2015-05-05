@@ -80,9 +80,9 @@ public class VPAIDWrapper extends Sprite {
    */
   private function registerExternalMethods():void {
     try {
-      ExternalInterface.addCallback("vwEcho", onEchoCalled);
-      ExternalInterface.addCallback("vwGetProperty", onGetPropertyCalled);
-      ExternalInterface.addCallback("vwSetProperty", onSetPropertyCalled);
+      ExternalInterface.addCallback("echo", onEchoCalled);
+      ExternalInterface.addCallback("getProperty", onGetPropertyCalled);
+      ExternalInterface.addCallback("setProperty", onSetPropertyCalled);
     } catch (e:SecurityError) {
       if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
         throw new SecurityError(e.message);
@@ -176,23 +176,26 @@ public class VPAIDWrapper extends Sprite {
     return pResponse;
   }
 
+  /**
+   * External read access to VPAID object properties.
+   * @param pPropertyName
+   * @return
+   */
   private function onGetPropertyCalled(pPropertyName:String = ""):* {
-    switch (pPropertyName) {
-      case "mode":
-        break;
-      //return _app.model.mode;
+    if (_app != null && _app.model !== null) {
+      return _app.model.getAdProperty(pPropertyName);
     }
     return null;
   }
 
+  /**
+   * External write access to VPAID object properties.
+   * @param pPropertyName
+   * @param pValue
+   */
   private function onSetPropertyCalled(pPropertyName:String = "", pValue:* = null):void {
-    switch (pPropertyName) {
-      case "duration":
-        //_app.model.duration = Number(pValue);
-        break;
-      default:
-        //_app.model.broadcastErrorEventExternally(ExternalErrorEventName.PROPERTY_NOT_FOUND, pPropertyName);
-        break;
+    if (_app != null && _app.model !== null) {
+      _app.model.setAdProperty(pPropertyName, pValue);
     }
   }
 }

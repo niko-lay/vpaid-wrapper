@@ -19,13 +19,36 @@ import flash.external.ExternalInterface;
 
 public class AdContainer extends Sprite {
 
-  private var _ad:*;
+  private var _ad:VPAID;
   private var _adUnits:Array;
   private var _currentAdUnit:AdUnit;
   private var _adIsPlaying:Boolean = false;
   private var _durationTimer:Timer;
 
   /** INITIALIZATION **/
+
+  /**
+   * Provides external read access to VPAID object properties.
+   * @param propertyName
+   * @return
+   */
+  public function getAdProperty(propertyName:String):* {
+    if (_ad != null && _ad.hasOwnProperty(propertyName)) {
+      return _ad[propertyName];
+    }
+    return null;
+  }
+
+  /**
+   * Provides external write access to VPAID object properties.
+   * @param propertyName
+   * @param value
+   */
+  public function setAdProperty(propertyName:String = "", value:* = null):void {
+    if (_ad != null && _ad.hasOwnProperty(propertyName)) {
+      _ad[propertyName] = value;
+    }
+  }
 
   /**
    * Main initialization point, should be called when view is ready.
@@ -71,7 +94,7 @@ public class AdContainer extends Sprite {
     _ad.addEventListener(VPAIDEvent.AdError, adError);
     // Determine VPAID version (mostly for debugging)
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
-    console.log('AdContainer::onAdUnitLoaded - Handshake version:', handshakeVersion);
+    console.log('AdContainer::onAdUnitLoaded - VPAID Handshake version:', handshakeVersion);
     // Initialize ad
     _ad.initAd(_currentAdUnit.width, _currentAdUnit.height, "normal", _currentAdUnit.bitrate);
   }
@@ -95,7 +118,7 @@ public class AdContainer extends Sprite {
    */
   private function adStarted(event:Event):void {
     _adIsPlaying = true;
-    startDurationTimer();
+    //startDurationTimer();
     JSInterface.broadcast(VPAIDEvent.AdStarted);
     JSInterface.broadcast(VPAIDEvent.AdImpression);
   }
