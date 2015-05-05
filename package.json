@@ -1,18 +1,18 @@
 {
-  "name": "videojs-swf",
-  "description": "The Flash-fallback video player for video.js (http://videojs.com)",
-  "version": "4.5.1",
-  "copyright": "Copyright 2014 Brightcove, Inc. https://github.com/videojs/video-js-swf/blob/master/LICENSE",
+  "name": "vpaid-wrapper",
+  "description": "",
+  "version": "0.1.0",
+  "copyright": "Copyright 2015 OnCircle, Inc.",
   "keywords": [
     "flash",
     "video",
     "player"
   ],
   "homepage": "http://videojs.com",
-  "author": "Brightcove",
+  "author": "OnCircle",
   "repository": {
     "type": "git",
-    "url": "https://github.com/videojs/video-js-swf.git"
+    "url": "https://github.com/OnCircle/vpaid-wrapper.git"
   },
   "devDependencies": {
     "async": "~0.2.9",
