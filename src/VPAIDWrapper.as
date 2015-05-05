@@ -121,14 +121,10 @@ public class VPAIDWrapper extends Sprite {
 
   /** STAGE EVENTS **/
 
-  private function onAddedToStage(e:Event):void {
-    stage.addEventListener(MouseEvent.CLICK, onStageClick);
-    stage.addEventListener(Event.RESIZE, onStageResize);
-    stage.scaleMode = StageScaleMode.NO_SCALE;
-    stage.align = StageAlign.TOP_LEFT;
-    _stageSizeTimer.start();
-  }
-
+  /**
+   * Monitors stage state.
+   * @param e
+   */
   private function onStageSizeTimerTick(e:TimerEvent):void {
     if (stage.stageWidth > 0 && stage.stageHeight > 0) {
       _stageSizeTimer.stop();
@@ -137,6 +133,22 @@ public class VPAIDWrapper extends Sprite {
     }
   }
 
+  /**
+   * Wires additional events once stage is initialized.
+   * @param e
+   */
+  private function onAddedToStage(e:Event):void {
+    stage.addEventListener(MouseEvent.CLICK, onStageClick);
+    stage.addEventListener(Event.RESIZE, onStageResize);
+    stage.scaleMode = StageScaleMode.NO_SCALE;
+    stage.align = StageAlign.TOP_LEFT;
+    _stageSizeTimer.start();
+  }
+
+  /**
+   * Stage size changed.
+   * @param e
+   */
   private function onStageResize(e:Event):void {
     if (_app != null) {
       //_app.model.stageRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
@@ -144,12 +156,21 @@ public class VPAIDWrapper extends Sprite {
     }
   }
 
+  /**
+   * Global click event.
+   * @param e
+   */
   private function onStageClick(e:MouseEvent):void {
     //_app.model.broadcastEventExternally(ExternalEventName.ON_STAGE_CLICK);
   }
 
   /** EXTERNAL METHODS **/
 
+  /**
+   * External echo function for debug purposes.
+   * @param pResponse
+   * @return
+   */
   private function onEchoCalled(pResponse:* = null):* {
     return pResponse;
   }
