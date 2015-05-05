@@ -1,5 +1,7 @@
 package com.videojs {
 
+import com.videojs.vpaid.AdUnit;
+
 import flash.display.Sprite;
 
 import com.videojs.vpaid.AdContainer;
@@ -23,17 +25,10 @@ public class WrapperApp extends Sprite {
     _uiView = new WrapperView(width, height);
     addChild(_uiView);
     // Initialize ad sub-view
-    var adAssets:Array = [];
-    adAssets.push({
-      path: adSrc,
-      width: width,
-      height: height,
-      bitrate: 800,
-      type: 'application/x-shockwave-flash',
-      duration: 30,
-      creativeSource: ''
-    });
-    _uiView.adView.init(adAssets);
+    var adUnits:Array = [];
+    var adUnit:AdUnit = new AdUnit(adSrc, width, height, 30);
+    adUnits.push(adUnit);
+    _uiView.adView.init(adUnits);
   }
 }
 

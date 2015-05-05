@@ -22,8 +22,8 @@ import flash.external.ExternalInterface;
 public class AdContainer extends Sprite {
 
   private var _ad:*;
-  private var _adAssets:Array;
-  private var _currentAdAsset:Object;
+  private var _adUnits:Array;
+  private var _currentAdUnit:AdUnit;
   private var _adIsPlaying:Boolean = false;
   private var _durationTimer:Timer;
 
@@ -33,21 +33,21 @@ public class AdContainer extends Sprite {
    * Main initialization point, should be called when view is ready.
    * @param adAssets
    */
-  public function init(adAssets:Array):void {
-    _adAssets = adAssets;
-    _currentAdAsset = _adAssets.shift();
-    loadAdAsset(_currentAdAsset);
+  public function init(adUnits:Array):void {
+    _adUnits = adUnits;
+    _currentAdUnit = _adUnits.shift();
+    loadAdUnit(_currentAdUnit);
   }
 
   /**
    * Downloads and loads the given ad asset.
    * @param asset
    */
-  private function loadAdAsset(asset:Object):void {
+  private function loadAdUnit(adUnit:AdUnit):void {
     var loader:Loader = new Loader();
     var loaderContext:LoaderContext = new LoaderContext();
     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (evt:Object):void {
-      onAdAssetLoaded(evt, asset);
+      onAdUnitLoaded(evt, adUnit);
     });
     loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (evt:SecurityErrorEvent):void {
       //throwAdError('initError: Security error '+evt.text);
@@ -55,7 +55,7 @@ public class AdContainer extends Sprite {
     loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (evt:IOErrorEvent):void {
       //throwAdError('initError: Error loading '+evt.text);
     });
-    loader.load(new URLRequest(asset.path), loaderContext);
+    loader.load(new URLRequest(adUnit.src), loaderContext);
   }
 
   /**
@@ -63,7 +63,7 @@ public class AdContainer extends Sprite {
    * @param evt
    * @param asset
    */
-  private function onAdAssetLoaded(evt:Object, asset:Object):void {
+  private function onAdUnitLoaded(evt:Object, adUnit:AdUnit):void {
     _ad = new VPAID(evt.target.content);
     // Wire ad events
     _ad.addEventListener(VPAIDEvent.AdLoaded, function ():void {
@@ -82,7 +82,7 @@ public class AdContainer extends Sprite {
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
     console.log('AdContainer::onAdAssetLoaded - Handshake version:', handshakeVersion);
     // Initialize ad
-    _ad.initAd(asset.width, asset.height, "normal", asset.bitrate, "", "");
+    _ad.initAd(adUnit.width, adUnit.height, "normal", adUnit.bitrate, "", "");
   }
 
   /** AD EVENT HANLDERS **/
@@ -134,7 +134,7 @@ public class AdContainer extends Sprite {
   protected function startDurationTimer():void {
     var timerDuration:Number = _ad.adDuration;
     if (timerDuration < 0) {
-      timerDuration = _currentAdAsset.adDuration;
+      timerDuration = _currentAdUnit.duration;
     }
     _durationTimer = new Timer(1000, timerDuration);
     _durationTimer.addEventListener(TimerEvent.TIMER, adDurationTick);
