@@ -127,6 +127,14 @@ public class AdContainer extends EventDispatcher {
     _ad.addEventListener(VPAIDEvent.AdStarted, adStarted);
     _ad.addEventListener(VPAIDEvent.AdStopped, adStopped);
     _ad.addEventListener(VPAIDEvent.AdSkipped, adSkipped);
+    _ad.addEventListener(VPAIDEvent.AdSkippableStateChange, adSkippableStateChange);
+    _ad.addEventListener(VPAIDEvent.AdSizeChange, adSizeChange);
+    _ad.addEventListener(VPAIDEvent.AdLinearChange, adLinearChange);
+    _ad.addEventListener(VPAIDEvent.AdDurationChange, adDurationChange);
+    _ad.addEventListener(VPAIDEvent.AdExpandedChange, adExpandedChange);
+    _ad.addEventListener(VPAIDEvent.AdRemainingTimeChange, adRemainingTimeChange);
+    _ad.addEventListener(VPAIDEvent.AdVolumeChange, adVolumeChange);
+    _ad.addEventListener(VPAIDEvent.AdImpression, adImpression);
     _ad.addEventListener(VPAIDEvent.AdError, adError);
     // Determine VPAID version (mostly for debugging)
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
@@ -143,6 +151,14 @@ public class AdContainer extends EventDispatcher {
     _ad.removeEventListener(VPAIDEvent.AdStarted, adStarted);
     _ad.removeEventListener(VPAIDEvent.AdStopped, adStopped);
     _ad.removeEventListener(VPAIDEvent.AdSkipped, adSkipped);
+    _ad.removeEventListener(VPAIDEvent.AdSkippableStateChange, adSkippableStateChange);
+    _ad.removeEventListener(VPAIDEvent.AdSizeChange, adSizeChange);
+    _ad.removeEventListener(VPAIDEvent.AdLinearChange, adLinearChange);
+    _ad.removeEventListener(VPAIDEvent.AdDurationChange, adDurationChange);
+    _ad.removeEventListener(VPAIDEvent.AdExpandedChange, adExpandedChange);
+    _ad.removeEventListener(VPAIDEvent.AdRemainingTimeChange, adRemainingTimeChange);
+    _ad.removeEventListener(VPAIDEvent.AdVolumeChange, adVolumeChange);
+    _ad.removeEventListener(VPAIDEvent.AdImpression, adImpression);
     _ad.removeEventListener(VPAIDEvent.AdError, adError);
     _ad = null;
     _currentAdUnit = null;
@@ -171,7 +187,6 @@ public class AdContainer extends EventDispatcher {
     _adIsPlaying = true;
     //startDurationTimer();
     JSInterface.broadcast(VPAIDEvent.AdStarted);
-    JSInterface.broadcast(VPAIDEvent.AdImpression);
   }
 
   /**
@@ -191,6 +206,70 @@ public class AdContainer extends EventDispatcher {
    */
   public function adSkipped(event:Event):void {
     JSInterface.broadcast(VPAIDEvent.AdSkipped);
+  }
+
+  /**
+   * Fired by the ad unit when it's skippable state has changed.
+   * @param event
+   */
+  public function adSkippableStateChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdSkippableStateChange);
+  }
+
+  /**
+   * Fired by the ad unit when it size changes, usually as a response to resizeAd().
+   * @param event
+   */
+  public function adSizeChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdSizeChange);
+  }
+
+  /**
+   * Fired by the ad unit when it has changed playback mode.
+   * @param event
+   */
+  public function adLinearChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdLinearChange);
+  }
+
+  /**
+   * Fired by the ad unit when duration changes in response to user interaction.
+   * @param event
+   */
+  public function adDurationChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdDurationChange);
+  }
+
+  /**
+   * Fired by the ad unit when its expanded state changes.
+   * @param event
+   */
+  public function adExpandedChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdExpandedChange);
+  }
+
+  /**
+   * (VPAID 1.0) Fired by the ad unit when its remaining playback time has changed.
+   * @param event
+   */
+  public function adRemainingTimeChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdRemainingTimeChange);
+  }
+
+  /**
+   * Fired by the ad unit when its volume changes.
+   * @param event
+   */
+  public function adVolumeChange(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdVolumeChange);
+  }
+
+  /**
+   * Fired by the ad unit when it considers that the ad impression has occurred, which could be different from ad start.
+   * @param event
+   */
+  public function adImpression(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdImpression);
   }
 
   /**
