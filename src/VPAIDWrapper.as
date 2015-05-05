@@ -153,7 +153,7 @@ public class VPAIDWrapper extends Sprite {
         width: stage.stageWidth,
         height: stage.stageHeight
       };
-      dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.STAGE_RESIZE, data));
+      _app.model.dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.STAGE_RESIZE, data));
     }
   }
 

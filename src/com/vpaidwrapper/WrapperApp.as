@@ -31,10 +31,8 @@ public class WrapperApp extends Sprite {
     addChild(_uiView);
     // Initialize ad sub-view
     var adUnits:Array = [new AdUnit(adSrc, stageWidth, stageHeight, adDuration, adBitrate)];
-    _model = new AdContainer();
+    _model = AdContainer.getInstance();
     _model.init(adUnits);
-    // Add to main view
-    _uiView.adView = _model;
   }
 
   public function get model():AdContainer {

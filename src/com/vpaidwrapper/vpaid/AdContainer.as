@@ -2,6 +2,7 @@ package com.vpaidwrapper.vpaid {
 
 import com.vpaidwrapper.*;
 import com.vpaidwrapper.events.VPAIDEvent;
+import com.vpaidwrapper.events.VPAIDWrapperEvent;
 import com.vpaidwrapper.util.JSInterface;
 import com.vpaidwrapper.util.console;
 
@@ -17,7 +18,9 @@ import flash.system.LoaderContext;
 
 import flash.external.ExternalInterface;
 
-public class AdContainer extends Sprite {
+public class AdContainer extends EventDispatcher {
+
+  private static var _instance:AdContainer;
 
   private var _ad:VPAID;
   private var _adUnits:Array;
@@ -25,7 +28,37 @@ public class AdContainer extends Sprite {
   private var _adIsPlaying:Boolean = false;
   private var _durationTimer:Timer;
 
-  /** INITIALIZATION **/
+  /**
+   * Constructor.
+   * @param pLock
+   */
+  public function AdContainer(pLock:SingletonLock) {
+    if (!pLock is SingletonLock) {
+      throw new Error("Invalid Singleton access. Use AdContainer.getInstance()!");
+    }
+  }
+
+  /**
+   * Obtain singleton instance.
+   * @return
+   */
+  public static function getInstance():AdContainer {
+    if (_instance === null){
+      _instance = new AdContainer(new SingletonLock());
+    }
+    return _instance;
+  }
+
+  /** PROPERTIES **/
+
+  /**
+   *
+   */
+  public function get displayObject():* {
+    if (_ad != null) {
+      return _ad.displayObject;
+    }
+  }
 
   /**
    * Provides external read access to VPAID object properties.
@@ -49,6 +82,8 @@ public class AdContainer extends Sprite {
       _ad[propertyName] = value;
     }
   }
+
+  /** INITIALIZATION **/
 
   /**
    * Main initialization point, should be called when view is ready.
@@ -122,10 +157,9 @@ public class AdContainer extends Sprite {
    */
   private function adLoaded(event:Event):void {
     // Add ad unit to stage
-    addChild(_ad.displayObject);
+    dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.AD_LOADED));
     JSInterface.broadcast(VPAIDEvent.AdLoaded);
-    // Resize to current stage values and then start
-    _ad.resizeAd(stage.width, stage.height, "normal");
+    // Start ad playback
     _ad.startAd();
   }
 
@@ -217,3 +251,17 @@ public class AdContainer extends Sprite {
 }
 
 }
+
+/**
+ * @internal This is a private class declared outside of the package
+ * that is only accessible to classes inside of this file
+ * file.  Because of that, no outside code is able to get a
+ * reference to this class to pass to the constructor, which
+ * enables us to prevent outside instantiation.
+ *
+ * We do this because Actionscript doesn't allow private constructors,
+ * which prevents us from creating a "true" singleton.
+ *
+ * @private
+ */
+class SingletonLock {}

@@ -3,8 +3,8 @@ package com.vpaidwrapper.events {
 import flash.events.Event;
 
 public class VPAIDWrapperEvent extends Event {
-  public static const INIT_DONE:String = "VideoJSEvent.INIT_DONE";
-  public static const STAGE_RESIZE:String = "VideoJSEvent.STAGE_RESIZE";
+  public static const AD_LOADED:String = "VPAIDWrapperEvent.AD_LOADED";
+  public static const STAGE_RESIZE:String = "VPAIDWrapperEvent.STAGE_RESIZE";
   private var _data:Object;
 
   public function VPAIDWrapperEvent(pType:String, pData:Object = null) {

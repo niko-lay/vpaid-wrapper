@@ -24,7 +24,8 @@ import mx.formatters.NumberBase;
 
 public class WrapperView extends Sprite {
 
-  private var _adView:AdContainer;
+  private var _model:AdContainer;
+  private var _adView:*;
   private var _stageWidth:int;
   private var _stageHeight:int;
 
@@ -36,48 +37,31 @@ public class WrapperView extends Sprite {
   public function WrapperView(width:int, height:int) {
     _stageWidth = width;
     _stageHeight = height;
-
-    //_model = VideoJSModel.getInstance();
-    //_model.addEventListener(VideoJSEvent.POSTER_SET, onPosterSet);
-    //_model.addEventListener(VideoJSEvent.BACKGROUND_COLOR_SET, onBackgroundColorSet);
-    //_model.addEventListener(VideoJSEvent.STAGE_RESIZE, onStageResize);
-    //_model.addEventListener(VideoPlaybackEvent.ON_STREAM_START, onStreamStart);
-    //_model.addEventListener(VideoPlaybackEvent.ON_META_DATA, onMetaData);
-    //_model.addEventListener(VideoPlaybackEvent.ON_VIDEO_DIMENSION_UPDATE, onDimensionUpdate);
-
-    // Draw ad view
-    //_adView = new AdContainer();
-    //_adView.x = 0;
-    //_adView.y = 0;
-    //_adView.addEventListener(VPAIDEvent.AdLoaded, onAdStart);
-    //addChild(_adView);
+    // Listen to pertinent model events
+    _model = AdContainer.getInstance();
+    _model.addEventListener(VPAIDWrapperEvent.AD_LOADED, onAdLoaded);
+    _model.addEventListener(VPAIDWrapperEvent.STAGE_RESIZE, onStageResize);
   }
 
   /**
-   * Adds the Ad Container view to the main view.
+   * Once an ad unit is loaded, we add it to the main view.
    * @param adContainer
    */
-  public function set adView(adContainer:AdContainer):void {
-    _adView = adContainer;
+  public function onAdLoaded(e:VPAIDWrapperEvent):void {
+    _adView = _model.displayObject;
     _adView.x = 0;
     _adView.y = 0;
     addChild(_adView);
   }
 
+  /**
+   * Fired when main stage is resized.
+   * @param e
+   */
   private function onStageResize(e:VPAIDWrapperEvent):void {
     _stageWidth = e.data.width;
     _stageHeight = e.data.height;
-    //_uiBackground.graphics.clear();
-    //_uiBackground.graphics.beginFill(1, 1);
-    //_uiBackground.graphics.drawRect(0, 0, _stageWidth, _stageHeight);
-    //_uiBackground.graphics.endFill();
-    //sizePoster();
-    //sizeVideoObject();
   }
-
-  //private function onDimensionUpdate(e:VideoPlaybackEvent):void {
-    //sizeVideoObject();
-  //}
 }
 
 }
