@@ -65,23 +65,15 @@ public class AdContainer extends Sprite {
   private function onAdUnitLoaded(evt:Object):void {
     _ad = new VPAID(evt.target.content);
     // Wire ad events
-    _ad.addEventListener(VPAIDEvent.AdLoaded, function ():void {
-      adLoaded();
-    });
-    _ad.addEventListener(VPAIDEvent.AdStarted, function ():void {
-      adStarted();
-    });
-    _ad.addEventListener(VPAIDEvent.AdStopped, function ():void {
-      adStopped();
-    });
-    _ad.addEventListener(VPAIDEvent.AdError, function ():void {
-      adError();
-    });
+    _ad.addEventListener(VPAIDEvent.AdLoaded, adLoaded);
+    _ad.addEventListener(VPAIDEvent.AdStarted, adStarted);
+    _ad.addEventListener(VPAIDEvent.AdStopped, adStopped);
+    _ad.addEventListener(VPAIDEvent.AdError, adError);
     // Determine VPAID version (mostly for debugging)
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
     console.log('AdContainer::onAdUnitLoaded - Handshake version:', handshakeVersion);
     // Initialize ad
-    _ad.initAd(_currentAdUnit.width, _currentAdUnit.height, "normal", _currentAdUnit.bitrate, "", "");
+    _ad.initAd(_currentAdUnit.width, _currentAdUnit.height, "normal", _currentAdUnit.bitrate);
   }
 
   /** AD EVENT HANLDERS **/
@@ -89,7 +81,7 @@ public class AdContainer extends Sprite {
   /**
    * Fired by the ad unit when it's content has finished loading.
    */
-  private function adLoaded():void {
+  private function adLoaded(event:Event):void {
     // Add ad unit to stage
     addChild(_ad.displayObject);
     JSInterface.broadcast(VPAIDEvent.AdLoaded);
@@ -101,7 +93,7 @@ public class AdContainer extends Sprite {
   /**
    * Fired by the ad unit when it's content has started.
    */
-  private function adStarted():void {
+  private function adStarted(event:Event):void {
     _adIsPlaying = true;
     startDurationTimer();
     JSInterface.broadcast(VPAIDEvent.AdStarted);
@@ -111,7 +103,7 @@ public class AdContainer extends Sprite {
   /**
    * Fired by the ad unit when it's content has stopped.
    */
-  public function adStopped():void {
+  public function adStopped(event:Event):void {
     if (_adIsPlaying) {
       _ad = null;
       _currentAdUnit = null;
@@ -123,7 +115,7 @@ public class AdContainer extends Sprite {
   /**
    * Fired by the ad unit when it has encountered an error.
    */
-  private function adError():void {
+  private function adError(event:Event):void {
     _ad.stopAd();
     dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
   }
@@ -158,7 +150,7 @@ public class AdContainer extends Sprite {
       _durationTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
       _durationTimer = null;
     }
-    adStopped();
+    adStopped(null);
   }
 
   /*

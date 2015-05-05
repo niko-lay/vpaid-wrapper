@@ -27,7 +27,11 @@ public class WrapperView extends Sprite {
   private var _stageWidth:int;
   private var _stageHeight:int;
 
-
+  /**
+   * Constructor.
+   * @param width
+   * @param height
+   */
   public function WrapperView(width:int, height:int) {
     _stageWidth = width;
     _stageHeight = height;
@@ -41,15 +45,22 @@ public class WrapperView extends Sprite {
     //_model.addEventListener(VideoPlaybackEvent.ON_VIDEO_DIMENSION_UPDATE, onDimensionUpdate);
 
     // Draw ad view
-    _adView = new AdContainer();
-    _adView.x = 0;
-    _adView.y = 0;
-    _adView.addEventListener(VPAIDEvent.AdLoaded, onAdStart);
-    addChild(_adView);
+    //_adView = new AdContainer();
+    //_adView.x = 0;
+    //_adView.y = 0;
+    //_adView.addEventListener(VPAIDEvent.AdLoaded, onAdStart);
+    //addChild(_adView);
   }
 
-  public function get adView():AdContainer {
-    return _adView;
+  /**
+   * Adds the Ad Container view to the main view.
+   * @param adContainer
+   */
+  public function set adView(adContainer:AdContainer):void {
+    _adView = adContainer;
+    _adView.x = 0;
+    _adView.y = 0;
+    addChild(_adView);
   }
 
 /*  private function onBackgroundColorSet(e:VideoPlaybackEvent):void {
@@ -69,11 +80,6 @@ public class WrapperView extends Sprite {
     //sizePoster();
     //sizeVideoObject();
   }
-
-  private function onAdStart(e:Object):void {
-    //_uiPosterImage.visible = false;
-  }
-
 
   //private function onDimensionUpdate(e:VideoPlaybackEvent):void {
     //sizeVideoObject();

@@ -1,5 +1,6 @@
 package com.videojs {
 
+import com.videojs.vpaid.AdContainer;
 import com.videojs.vpaid.AdUnit;
 
 import flash.display.Sprite;
@@ -15,6 +16,7 @@ import com.videojs.util.console;
 public class WrapperApp extends Sprite {
 
   private var _uiView:WrapperView;
+  private var _model:AdContainer;
 
   /**
    * Initialized application by loading all views and the specified ad.
@@ -29,10 +31,15 @@ public class WrapperApp extends Sprite {
     _uiView = new WrapperView(stageWidth, stageHeight);
     addChild(_uiView);
     // Initialize ad sub-view
-    var adUnits:Array = [];
-    var adUnit:AdUnit = new AdUnit(adSrc, stageWidth, stageHeight, adDuration, adBitrate);
-    adUnits.push(adUnit);
-    _uiView.adView.init(adUnits);
+    var adUnits:Array = [new AdUnit(adSrc, stageWidth, stageHeight, adDuration, adBitrate)];
+    _model = new AdContainer();
+    _model.init(adUnits);
+    // Add to main view
+    _uiView.adView = _model;
+  }
+
+  public function get model():AdContainer {
+    return _model;
   }
 }
 
