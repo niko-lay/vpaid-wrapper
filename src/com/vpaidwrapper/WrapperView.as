@@ -64,13 +64,6 @@ public class WrapperView extends Sprite {
     addChild(_adView);
   }
 
-/*  private function onBackgroundColorSet(e:VideoPlaybackEvent):void {
-    _uiBackground.graphics.clear();
-    _uiBackground.graphics.beginFill(1, 1);
-    _uiBackground.graphics.drawRect(0, 0, _stageWidth, _stageHeight);
-    _uiBackground.graphics.endFill();
-  }*/
-
   private function onStageResize(e:VPAIDWrapperEvent):void {
     _stageWidth = e.data.width;
     _stageHeight = e.data.height;

@@ -91,6 +91,7 @@ public class AdContainer extends Sprite {
     _ad.addEventListener(VPAIDEvent.AdLoaded, adLoaded);
     _ad.addEventListener(VPAIDEvent.AdStarted, adStarted);
     _ad.addEventListener(VPAIDEvent.AdStopped, adStopped);
+    _ad.addEventListener(VPAIDEvent.AdSkipped, adSkipped);
     _ad.addEventListener(VPAIDEvent.AdError, adError);
     // Determine VPAID version (mostly for debugging)
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
@@ -99,10 +100,25 @@ public class AdContainer extends Sprite {
     _ad.initAd(_currentAdUnit.width, _currentAdUnit.height, "normal", _currentAdUnit.bitrate);
   }
 
+  /**
+   * Resource cleanup after ad has completed or failed.
+   */
+  private function clearCurrentAdUnit():void {
+    _ad.removeEventListener(VPAIDEvent.AdLoaded, adLoaded);
+    _ad.removeEventListener(VPAIDEvent.AdStarted, adStarted);
+    _ad.removeEventListener(VPAIDEvent.AdStopped, adStopped);
+    _ad.removeEventListener(VPAIDEvent.AdSkipped, adSkipped);
+    _ad.removeEventListener(VPAIDEvent.AdError, adError);
+    _ad = null;
+    _currentAdUnit = null;
+    _adIsPlaying = false;
+  }
+
   /** AD EVENT HANLDERS **/
 
   /**
    * Fired by the ad unit when it's content has finished loading.
+   * @param event
    */
   private function adLoaded(event:Event):void {
     // Add ad unit to stage
@@ -115,6 +131,7 @@ public class AdContainer extends Sprite {
 
   /**
    * Fired by the ad unit when it's content has started.
+   * @param event
    */
   private function adStarted(event:Event):void {
     _adIsPlaying = true;
@@ -125,18 +142,26 @@ public class AdContainer extends Sprite {
 
   /**
    * Fired by the ad unit when it's content has stopped.
+   * @param event
    */
   public function adStopped(event:Event):void {
     if (_adIsPlaying) {
-      _ad = null;
-      _currentAdUnit = null;
-      _adIsPlaying = false;
+      clearCurrentAdUnit()
       JSInterface.broadcast(VPAIDEvent.AdStopped);
     }
   }
 
   /**
+   * Fired by the ad unit when it's content has been skipped.
+   * @param event
+   */
+  public function adSkipped(event:Event):void {
+    JSInterface.broadcast(VPAIDEvent.AdSkipped);
+  }
+
+  /**
    * Fired by the ad unit when it has encountered an error.
+   * @param event
    */
   private function adError(event:Event):void {
     _ad.stopAd();
