@@ -16,10 +16,6 @@ public class WrapperApp extends Sprite {
 
   private var _uiView:WrapperView;
 
-  public function WrapperApp() {
-
-  }
-
   public function init(adSrc:String, width:int, height:int):void {
     // Initialize main view
     _uiView = new WrapperView(width, height);
