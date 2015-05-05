@@ -1,6 +1,7 @@
 package com.vpaidwrapper {
 
 import com.vpaidwrapper.events.*;
+import com.vpaidwrapper.events.VPAIDWrapperEvent;
 
 import flash.display.Bitmap;
 import flash.display.Loader;
@@ -70,7 +71,7 @@ public class WrapperView extends Sprite {
     _uiBackground.graphics.endFill();
   }*/
 
-  private function onStageResize(e:VideoJSEvent):void {
+  private function onStageResize(e:VPAIDWrapperEvent):void {
     _stageWidth = e.data.width;
     _stageHeight = e.data.height;
     //_uiBackground.graphics.clear();

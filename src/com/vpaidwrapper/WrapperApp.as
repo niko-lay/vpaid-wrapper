@@ -6,7 +6,6 @@ import com.vpaidwrapper.vpaid.AdUnit;
 import flash.display.Sprite;
 
 import com.vpaidwrapper.vpaid.AdContainer;
-import com.vpaidwrapper.events.VideoJSEvent;
 
 import flash.external.ExternalInterface;
 import flash.utils.setTimeout;

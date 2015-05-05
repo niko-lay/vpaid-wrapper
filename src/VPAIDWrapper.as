@@ -1,7 +1,7 @@
 package {
 
 import com.vpaidwrapper.WrapperApp;
-import com.vpaidwrapper.events.VideoJSEvent;
+import com.vpaidwrapper.events.VPAIDWrapperEvent;
 import com.vpaidwrapper.util.JSInterface;
 import com.vpaidwrapper.util.console;
 
@@ -149,8 +149,11 @@ public class VPAIDWrapper extends Sprite {
    */
   private function onStageResize(e:Event):void {
     if (_app != null) {
-      //_app.model.stageRect = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
-      //_app.model.broadcastEvent(new VideoJSEvent(VideoJSEvent.STAGE_RESIZE, {}));
+      var data:Object = {
+        width: stage.stageWidth,
+        height: stage.stageHeight
+      };
+      dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.STAGE_RESIZE, data));
     }
   }
 
