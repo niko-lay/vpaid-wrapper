@@ -114,8 +114,7 @@ module.exports = function (grunt) {
       },
       vpaid_wrapper_swf: {
         files: {
-          'dist/vpaid-wrapper.swf': ['src/VPAIDWrapper.as'],
-          'sandbox/exampleadvpaid2.swf': ['sandbox/exampleAd/ExampleVPAID.as']
+          'dist/vpaid-wrapper.swf': ['src/VPAIDWrapper.as']
         }
       }
     },

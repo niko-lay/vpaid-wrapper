@@ -1,9 +1,9 @@
 package {
 
-import com.videojs.WrapperApp;
-import com.videojs.events.VideoJSEvent;
-import com.videojs.util.JSInterface;
-import com.videojs.util.console;
+import com.vpaidwrapper.WrapperApp;
+import com.vpaidwrapper.events.VideoJSEvent;
+import com.vpaidwrapper.util.JSInterface;
+import com.vpaidwrapper.util.console;
 
 import flash.display.Sprite;
 import flash.display.StageAlign;
