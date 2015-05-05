@@ -45,7 +45,12 @@ public class VPAID extends EventDispatcher implements IVPAID {
   }
 
   public function get adDuration():Number {
-    return _ad.adDuration;
+    // Fallback for VPAID 1.0
+    if (_ad.hasOwnProperty('adDuration')) {
+      return _ad.adDuration;
+    } else {
+      return -1;
+    }
   }
 
   public function get adVolume():Number {

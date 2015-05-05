@@ -23,8 +23,8 @@ public class AdContainer extends Sprite {
 
   private var _ad:*;
   private var _adAssets:Array;
+  private var _currentAdAsset:Object;
   private var _adIsPlaying:Boolean = false;
-  private var _adDuration:Number;
   private var _durationTimer:Timer;
 
   /** INITIALIZATION **/
@@ -35,8 +35,8 @@ public class AdContainer extends Sprite {
    */
   public function init(adAssets:Array):void {
     _adAssets = adAssets;
-    var asset:Object = _adAssets.shift();
-    loadAdAsset(asset);
+    _currentAdAsset = _adAssets.shift();
+    loadAdAsset(_currentAdAsset);
   }
 
   /**
@@ -78,6 +78,9 @@ public class AdContainer extends Sprite {
     _ad.addEventListener(VPAIDEvent.AdError, function ():void {
       adError();
     });
+    // Determine VPAID version (mostly for debugging)
+    var handshakeVersion:String = _ad.handshakeVersion('2.0');
+    console.log('AdContainer::onAdAssetLoaded - Handshake version:', handshakeVersion);
     // Initialize ad
     _ad.initAd(asset.width, asset.height, "normal", asset.bitrate, "", "");
   }
@@ -99,8 +102,8 @@ public class AdContainer extends Sprite {
    * Fired by the ad unit when it's content has started.
    */
   private function adStarted():void {
+    console.log('wtf ADSTARTED');
     _adIsPlaying = true;
-    _adDuration = _ad.adDuration();
     startDurationTimer();
     JSInterface.broadcast(VPAIDEvent.AdStarted);
     JSInterface.broadcast(VPAIDEvent.AdImpression);
@@ -129,7 +132,11 @@ public class AdContainer extends Sprite {
   /** DURATION TIMER **/
 
   protected function startDurationTimer():void {
-    _durationTimer = new Timer(1000, _adDuration);
+    var timerDuration:Number = _ad.adDuration;
+    if (timerDuration < 0) {
+      timerDuration = _currentAdAsset.adDuration;
+    }
+    _durationTimer = new Timer(1000, timerDuration);
     _durationTimer.addEventListener(TimerEvent.TIMER, adDurationTick);
     _durationTimer.addEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
     _durationTimer.start();
@@ -147,6 +154,7 @@ public class AdContainer extends Sprite {
 
   private function adDurationComplete(evt:Object):void {
     if (_durationTimer) {
+      _durationTimer.stop();
       _durationTimer.removeEventListener(TimerEvent.TIMER, adDurationTick);
       _durationTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
       _durationTimer = null;

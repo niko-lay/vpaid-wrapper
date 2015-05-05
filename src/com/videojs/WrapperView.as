@@ -24,7 +24,6 @@ import mx.formatters.NumberBase;
 
 public class WrapperView extends Sprite {
 
-  private var _uiBackground:Sprite;
   private var _adView:AdContainer;
   private var _stageWidth:int;
   private var _stageHeight:int;
@@ -42,13 +41,6 @@ public class WrapperView extends Sprite {
     //_model.addEventListener(VideoPlaybackEvent.ON_META_DATA, onMetaData);
     //_model.addEventListener(VideoPlaybackEvent.ON_VIDEO_DIMENSION_UPDATE, onDimensionUpdate);
 
-    // Draw background sprite
-    _uiBackground = new Sprite();
-    _uiBackground.graphics.beginFill(1, 1);
-    _uiBackground.graphics.drawRect(0, 0, _stageWidth, _stageHeight);
-    _uiBackground.graphics.endFill();
-    _uiBackground.alpha = 0;
-    addChild(_uiBackground);
     // Draw ad view
     _adView = new AdContainer();
     _adView.x = 0;
@@ -71,10 +63,10 @@ public class WrapperView extends Sprite {
   private function onStageResize(e:VideoJSEvent):void {
     _stageWidth = e.data.width;
     _stageHeight = e.data.height;
-    _uiBackground.graphics.clear();
-    _uiBackground.graphics.beginFill(1, 1);
-    _uiBackground.graphics.drawRect(0, 0, _stageWidth, _stageHeight);
-    _uiBackground.graphics.endFill();
+    //_uiBackground.graphics.clear();
+    //_uiBackground.graphics.beginFill(1, 1);
+    //_uiBackground.graphics.drawRect(0, 0, _stageWidth, _stageHeight);
+    //_uiBackground.graphics.endFill();
     //sizePoster();
     //sizeVideoObject();
   }
