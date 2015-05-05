@@ -35,8 +35,8 @@ public class AdContainer extends Sprite {
    */
   public function init(adUnits:Array):void {
     _adUnits = adUnits;
-    _currentAdUnit = _adUnits.shift();
-    loadAdUnit(_currentAdUnit);
+    var adUnit:AdUnit = _adUnits.shift();
+    loadAdUnit(adUnit);
   }
 
   /**
@@ -44,18 +44,19 @@ public class AdContainer extends Sprite {
    * @param asset
    */
   private function loadAdUnit(adUnit:AdUnit):void {
+    _currentAdUnit = adUnit;
     var loader:Loader = new Loader();
     var loaderContext:LoaderContext = new LoaderContext();
-    loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function (evt:Object):void {
-      onAdUnitLoaded(evt, adUnit);
-    });
+    loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAdUnitLoaded);
     loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (evt:SecurityErrorEvent):void {
+      _currentAdUnit = null;
       //throwAdError('initError: Security error '+evt.text);
     });
     loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (evt:IOErrorEvent):void {
+      _currentAdUnit = null;
       //throwAdError('initError: Error loading '+evt.text);
     });
-    loader.load(new URLRequest(adUnit.src), loaderContext);
+    loader.load(new URLRequest(_currentAdUnit.src), loaderContext);
   }
 
   /**
@@ -63,7 +64,7 @@ public class AdContainer extends Sprite {
    * @param evt
    * @param asset
    */
-  private function onAdUnitLoaded(evt:Object, adUnit:AdUnit):void {
+  private function onAdUnitLoaded(evt:Object):void {
     _ad = new VPAID(evt.target.content);
     // Wire ad events
     _ad.addEventListener(VPAIDEvent.AdLoaded, function ():void {
@@ -80,9 +81,9 @@ public class AdContainer extends Sprite {
     });
     // Determine VPAID version (mostly for debugging)
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
-    console.log('AdContainer::onAdAssetLoaded - Handshake version:', handshakeVersion);
+    console.log('AdContainer::onAdUnitLoaded - Handshake version:', handshakeVersion);
     // Initialize ad
-    _ad.initAd(adUnit.width, adUnit.height, "normal", adUnit.bitrate, "", "");
+    _ad.initAd(_currentAdUnit.width, _currentAdUnit.height, "normal", _currentAdUnit.bitrate, "", "");
   }
 
   /** AD EVENT HANLDERS **/
@@ -102,7 +103,6 @@ public class AdContainer extends Sprite {
    * Fired by the ad unit when it's content has started.
    */
   private function adStarted():void {
-    console.log('wtf ADSTARTED');
     _adIsPlaying = true;
     startDurationTimer();
     JSInterface.broadcast(VPAIDEvent.AdStarted);
@@ -114,9 +114,9 @@ public class AdContainer extends Sprite {
    */
   public function adStopped():void {
     if (_adIsPlaying) {
-      _adIsPlaying = false;
       _ad = null;
-      dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
+      _currentAdUnit = null;
+      _adIsPlaying = false;
       JSInterface.broadcast(VPAIDEvent.AdStopped);
     }
   }
