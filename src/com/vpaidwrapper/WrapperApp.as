@@ -35,6 +35,9 @@ public class WrapperApp extends Sprite {
     _model.init(adUnits);
   }
 
+  /**
+   * Model getter.
+   */
   public function get model():AdContainer {
     return _model;
   }

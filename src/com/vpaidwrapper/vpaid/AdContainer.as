@@ -8,7 +8,6 @@ import com.vpaidwrapper.util.console;
 
 import flash.display.Loader;
 import flash.display.Sprite;
-import flash.utils.Timer;
 import flash.events.*;
 import flash.media.Video;
 import flash.net.NetConnection;
@@ -26,7 +25,6 @@ public class AdContainer extends EventDispatcher {
   private var _adUnits:Array;
   private var _currentAdUnit:AdUnit;
   private var _adIsPlaying:Boolean = false;
-  private var _durationTimer:Timer;
 
   /**
    * Constructor.
@@ -185,7 +183,6 @@ public class AdContainer extends EventDispatcher {
    */
   private function adStarted(event:Event):void {
     _adIsPlaying = true;
-    //startDurationTimer();
     JSInterface.broadcast(VPAIDEvent.AdStarted);
   }
 
@@ -280,53 +277,6 @@ public class AdContainer extends EventDispatcher {
     _ad.stopAd();
     dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
   }
-
-  /** DURATION TIMER **/
-
-  protected function startDurationTimer():void {
-    var timerDuration:Number = _ad.adDuration;
-    if (timerDuration < 0) {
-      timerDuration = _currentAdUnit.duration;
-    }
-    _durationTimer = new Timer(1000, timerDuration);
-    _durationTimer.addEventListener(TimerEvent.TIMER, adDurationTick);
-    _durationTimer.addEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
-    _durationTimer.start();
-  }
-
-  private function adDurationTick(evt:Object):void {
-    //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventTimeRemaining);
-
-    //ExternalInterface.call("console.log", _ad.adSkippableState);
-
-    //if (_ad.adSkippableState) {
-      //_model.broadcastEventExternally(VPAIDEvent.AdPluginEventCanSkip);
-    //}
-  }
-
-  private function adDurationComplete(evt:Object):void {
-    if (_durationTimer) {
-      _durationTimer.stop();
-      _durationTimer.removeEventListener(TimerEvent.TIMER, adDurationTick);
-      _durationTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, adDurationComplete);
-      _durationTimer = null;
-    }
-    adStopped(null);
-  }
-
-  /*
-  public function pausePlayingAd():void {
-    _adIsPlaying = false;
-    _durationTimer.stop();
-    _ad.pauseAd();
-  }
-
-  public function resumePlayingAd():void {
-    _adIsPlaying = true;
-    _durationTimer.start();
-    _ad.resumeAd();
-  }
-  */
 }
 
 }
