@@ -15,8 +15,6 @@ import flash.net.NetStream;
 import flash.net.URLRequest;
 import flash.system.LoaderContext;
 
-import com.videojs.structs.ExternalEventName;
-
 import flash.external.ExternalInterface;
 
 public class AdContainer extends Sprite {

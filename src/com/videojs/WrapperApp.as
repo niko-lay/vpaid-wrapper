@@ -16,13 +16,13 @@ public class WrapperApp extends Sprite {
 
   private var _uiView:WrapperView;
 
-  public function init(adSrc:String, width:int, height:int):void {
+  public function init(adSrc:String, stageWidth:int, stageHeight:int):void {
     // Initialize main view
-    _uiView = new WrapperView(width, height);
+    _uiView = new WrapperView(stageWidth, stageHeight);
     addChild(_uiView);
     // Initialize ad sub-view
     var adUnits:Array = [];
-    var adUnit:AdUnit = new AdUnit(adSrc, width, height, 30);
+    var adUnit:AdUnit = new AdUnit(adSrc, stageWidth, stageHeight, 30);
     adUnits.push(adUnit);
     _uiView.adView.init(adUnits);
   }

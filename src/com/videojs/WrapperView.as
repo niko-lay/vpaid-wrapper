@@ -1,7 +1,6 @@
 package com.videojs {
 
 import com.videojs.events.*;
-import com.videojs.structs.ExternalErrorEventName;
 
 import flash.display.Bitmap;
 import flash.display.Loader;
