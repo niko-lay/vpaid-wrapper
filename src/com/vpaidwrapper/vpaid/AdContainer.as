@@ -274,8 +274,7 @@ public class AdContainer extends EventDispatcher {
    * @param event
    */
   private function adError(event:Event):void {
-    _ad.stopAd();
-    dispatchEvent(new VPAIDEvent(VPAIDEvent.AdStopped));
+    JSInterface.broadcast(VPAIDEvent.AdError);
   }
 }
 
