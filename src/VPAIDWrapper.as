@@ -20,7 +20,7 @@ import flash.utils.ByteArray;
 import flash.utils.Timer;
 import flash.utils.setTimeout;
 
-[SWF(frameRate="60", width="480", height="270")]
+[SWF(backgroundColor="#000000", frameRate="60", width="480", height="270")]
 public class VPAIDWrapper extends Sprite {
 
   public const VERSION:String = CONFIG::version;
