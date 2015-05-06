@@ -171,7 +171,7 @@ module.exports = function (grunt) {
           {
             cwd: 'dist',
             expand: true,
-            dest: '../gbox-video-player-tester',
+            dest: '../gbox-video-player-tester/swf',
             src: ["**"]
           }
         ]
