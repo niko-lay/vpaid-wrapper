@@ -44,10 +44,22 @@ public class WrapperView extends Sprite {
   }
 
   /**
+   * Resize current ad view to the specified width and height.
+   * @param width
+   * @param height
+   */
+  private function resizeAdView(width:int, height:int):void {
+    if (_adView != null) {
+      _adView.width = width;
+      _adView.height = height;
+    }
+  }
+
+  /**
    * Once an ad unit is loaded, we add it to the main view.
    * @param adContainer
    */
-  public function onAdLoaded(e:VPAIDWrapperEvent):void {
+  private function onAdLoaded(e:VPAIDWrapperEvent):void {
     _adView = _model.displayObject;
     _adView.x = 0;
     _adView.y = 0;
@@ -61,6 +73,7 @@ public class WrapperView extends Sprite {
   private function onStageResize(e:VPAIDWrapperEvent):void {
     _stageWidth = e.data.width;
     _stageHeight = e.data.height;
+    resizeAdView(_stageWidth, _stageHeight);
   }
 }
 
