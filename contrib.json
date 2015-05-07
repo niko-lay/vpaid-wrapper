@@ -1,7 +1,7 @@
 {
-  "owner": "videojs",
-  "project": "video-js-swf",
-  "developmentBranch": "master",
-  "releaseBranch": "stable",
+  "owner": "OnCircle",
+  "project": "vpaid-wrapper",
+  "developmentBranch": "develop",
+  "releaseBranch": "master",
   "remote": "origin"
 }

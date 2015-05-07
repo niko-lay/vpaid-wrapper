@@ -1,0 +1,29 @@
+{
+  "name": "vpaid-wrapper",
+  "version": "0.0.1",
+  "homepage": "https://github.com/OnCircle/vpaid-wrapper",
+  "authors": "OnCircle Inc. developer@oncircle.com",
+  "description": "",
+  "main": [
+    "dist/vpaid-wrapper.swf"
+  ],
+  "keywords": [],
+  "license": "MIT",
+  "ignore": [
+    "src/**",
+    ".jshintrc",
+    ".gitignore",
+    "package.json",
+    "Gruntfile.coffee",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+
+  },
+  "dependencies": {
+
+  }
+}
