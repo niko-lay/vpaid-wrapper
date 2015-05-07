@@ -1,6 +1,6 @@
 {
   "name": "vpaid-wrapper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/OnCircle/vpaid-wrapper",
   "authors": "OnCircle Inc. developer@oncircle.com",
   "description": "",
@@ -11,7 +11,8 @@
   "license": "MIT",
   "ignore": [
     "src/**",
-    ".idea/**",
+    "libs",
+    ".idea",
     ".jshintrc",
     ".actionScriptProperties",
     ".gitignore",
