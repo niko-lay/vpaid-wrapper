@@ -50,12 +50,19 @@ public class AdContainer extends EventDispatcher {
   /** PROPERTIES **/
 
   /**
-   *
+   * Returns a pointer to the displayable ad component.
    */
   public function get displayObject():* {
     if (_ad != null) {
       return _ad.displayObject;
     }
+  }
+
+  /**
+   * Provides external access to the VPAID ad API.
+   */
+  public function get ad():VPAID {
+    return _ad;
   }
 
   /**

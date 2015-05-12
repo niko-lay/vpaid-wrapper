@@ -81,6 +81,8 @@ public class VPAIDWrapper extends Sprite {
   private function registerExternalMethods():void {
     try {
       ExternalInterface.addCallback("echo", onEchoCalled);
+      ExternalInterface.addCallback("stopAd", onStopAdCalled);
+      ExternalInterface.addCallback("resizeAd", onResizeAdCalled);
       ExternalInterface.addCallback("getProperty", onGetPropertyCalled);
       ExternalInterface.addCallback("setProperty", onSetPropertyCalled);
     } catch (e:SecurityError) {
@@ -174,6 +176,23 @@ public class VPAIDWrapper extends Sprite {
    */
   private function onEchoCalled(pResponse:* = null):* {
     return pResponse;
+  }
+
+  /**
+   * VPAID stopAd method handler.
+   */
+  private function onStopAdCalled():void {
+    _app.model.ad.stopAd();
+  }
+
+  /**
+   * VPAID resizeAd method handler.
+   * @param width
+   * @param height
+   * @param viewMode
+   */
+  private function onResizeAdCalled(width:Number, height:Number, viewMode:String):void {
+    _app.model.ad.resizeAd(width, height, viewMode);
   }
 
   /**
