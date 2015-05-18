@@ -180,8 +180,6 @@ public class AdContainer extends EventDispatcher {
     // Add ad unit to stage
     dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.AD_LOADED));
     JSInterface.broadcast(VPAIDEvent.AdLoaded);
-    // Start ad playback
-    _ad.startAd();
   }
 
   /**
