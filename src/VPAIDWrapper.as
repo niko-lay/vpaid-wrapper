@@ -27,6 +27,7 @@ public class VPAIDWrapper extends Sprite {
 
   private var _app:WrapperApp;
   private var _stageSizeTimer:Timer;
+  private var _ready:Boolean = false;
 
   /**
    * Constructor.
@@ -57,10 +58,10 @@ public class VPAIDWrapper extends Sprite {
     }
     // Initialize and add application to stage
     _app = new WrapperApp();
-    _app.init(loaderInfo.parameters.src, stage.stageWidth, stage.stageHeight, loaderInfo.parameters.adDuration, loaderInfo.parameters.adBitrate);
+    _app.init(loaderInfo.parameters.src, stage.stageWidth, stage.stageHeight);
     addChild(_app);
-    // Notify wrapper's container
-    notifyReady();
+    // Notify wrapper's container when ad unit is ready to receive commands
+    _app.model.addEventListener(VPAIDWrapperEvent.READY, onReady);
   }
 
   /**
@@ -81,6 +82,7 @@ public class VPAIDWrapper extends Sprite {
   private function registerExternalMethods():void {
     try {
       ExternalInterface.addCallback("echo", onEchoCalled);
+      ExternalInterface.addCallback("initAd", onInitAdCalled);
       ExternalInterface.addCallback("startAd", onStartAdCalled);
       ExternalInterface.addCallback("stopAd", onStopAdCalled);
       ExternalInterface.addCallback("resizeAd", onResizeAdCalled);
@@ -100,7 +102,7 @@ public class VPAIDWrapper extends Sprite {
   /**
    * Notifies container that the VPAID wrapper has finished loading.
    */
-  private function notifyReady():void {
+  private function onReady(e:Event):void {
     if (loaderInfo.parameters.readyFunction != undefined) {
       try {
         ExternalInterface.call(JSInterface.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
@@ -110,6 +112,7 @@ public class VPAIDWrapper extends Sprite {
         }
       }
     }
+    _ready = true;
   }
 
   /**
@@ -180,17 +183,34 @@ public class VPAIDWrapper extends Sprite {
   }
 
   /**
+   * VPAID initAd method handler.
+   * @param width
+   * @param height
+   * @param viewMode
+   * @param bitrate
+   */
+  private function onInitAdCalled(width:Number, height:Number, viewMode:String, bitrate:Number):void {
+    if (_ready) {
+      _app.model.ad.initAd(width, height, viewMode, bitrate);
+    }
+  }
+
+  /**
    * VPAID startAd method handler.
    */
   private function onStartAdCalled():void {
-    _app.model.ad.startAd();
+    if (_ready) {
+      _app.model.ad.startAd();
+    }
   }
 
   /**
    * VPAID stopAd method handler.
    */
   private function onStopAdCalled():void {
-    _app.model.ad.stopAd();
+    if (_ready) {
+      _app.model.ad.stopAd();
+    }
   }
 
   /**
@@ -200,7 +220,9 @@ public class VPAIDWrapper extends Sprite {
    * @param viewMode
    */
   private function onResizeAdCalled(width:Number, height:Number, viewMode:String):void {
-    _app.model.ad.resizeAd(width, height, viewMode);
+    if (_ready) {
+      _app.model.ad.resizeAd(width, height, viewMode);
+    }
   }
 
   /**
@@ -209,7 +231,7 @@ public class VPAIDWrapper extends Sprite {
    * @return
    */
   private function onGetPropertyCalled(pPropertyName:String = ""):* {
-    if (_app != null && _app.model !== null) {
+    if (_ready) {
       return _app.model.getAdProperty(pPropertyName);
     }
     return null;
@@ -221,7 +243,7 @@ public class VPAIDWrapper extends Sprite {
    * @param pValue
    */
   private function onSetPropertyCalled(pPropertyName:String = "", pValue:* = null):void {
-    if (_app != null && _app.model !== null) {
+    if (_ready) {
       _app.model.setAdProperty(pPropertyName, pValue);
     }
   }

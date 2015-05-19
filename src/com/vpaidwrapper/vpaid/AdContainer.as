@@ -22,8 +22,6 @@ public class AdContainer extends EventDispatcher {
   private static var _instance:AdContainer;
 
   private var _ad:VPAID;
-  private var _adUnits:Array;
-  private var _currentAdUnit:AdUnit;
   private var _adIsPlaying:Boolean = false;
 
   /**
@@ -91,33 +89,20 @@ public class AdContainer extends EventDispatcher {
   /** INITIALIZATION **/
 
   /**
-   * Main initialization point, should be called when view is ready.
-   * @param adAssets
-   */
-  public function init(adUnits:Array):void {
-    _adUnits = adUnits;
-    var adUnit:AdUnit = _adUnits.shift();
-    loadAdUnit(adUnit);
-  }
-
-  /**
    * Downloads and loads the given ad asset.
    * @param asset
    */
-  private function loadAdUnit(adUnit:AdUnit):void {
-    _currentAdUnit = adUnit;
+  public function loadAdUnit(src:String):void {
     var loader:Loader = new Loader();
     var loaderContext:LoaderContext = new LoaderContext();
     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAdUnitLoaded);
     loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (evt:SecurityErrorEvent):void {
-      _currentAdUnit = null;
       //throwAdError('initError: Security error '+evt.text);
     });
     loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (evt:IOErrorEvent):void {
-      _currentAdUnit = null;
       //throwAdError('initError: Error loading '+evt.text);
     });
-    loader.load(new URLRequest(_currentAdUnit.src), loaderContext);
+    loader.load(new URLRequest(src), loaderContext);
   }
 
   /**
@@ -144,8 +129,8 @@ public class AdContainer extends EventDispatcher {
     // Determine VPAID version (mostly for debugging)
     var handshakeVersion:String = _ad.handshakeVersion('2.0');
     console.log('AdContainer::onAdUnitLoaded - VPAID Handshake version:', handshakeVersion);
-    // Initialize ad
-    _ad.initAd(_currentAdUnit.width, _currentAdUnit.height, "normal", _currentAdUnit.bitrate);
+    // Notify containing app that we're ready for API calls
+    dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.READY));
   }
 
   /**
@@ -166,7 +151,6 @@ public class AdContainer extends EventDispatcher {
     _ad.removeEventListener(VPAIDEvent.AdImpression, adImpression);
     _ad.removeEventListener(VPAIDEvent.AdError, adError);
     _ad = null;
-    _currentAdUnit = null;
     _adIsPlaying = false;
   }
 
