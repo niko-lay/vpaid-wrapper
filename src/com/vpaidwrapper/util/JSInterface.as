@@ -8,6 +8,36 @@ public class JSInterface {
   private static var _jsErrorEventProxyName:String = "VPAIDWrapper.onError";
 
   /**
+   * Get current name for JS event function.
+   */
+  public static function get jsEventProxyName():String {
+    return _jsEventProxyName;
+  }
+
+  /**
+   * Allows to set a custom function for JS events.
+   * @param value
+   */
+  public static function set jsEventProxyName(value:String):void {
+    _jsEventProxyName = value;
+  }
+
+  /**
+   * Get current name for JS error event function.
+   */
+  public static function get jsErrorEventProxyName():String {
+    return _jsErrorEventProxyName;
+  }
+
+  /**
+   * Allows to set a custom function for JS error events.
+   * @param value
+   */
+  public static function set jsErrorEventProxyName(value:String):void {
+    _jsErrorEventProxyName = value;
+  }
+
+  /**
    * This is an internal proxy that allows instances in this swf to broadcast events to a JS proxy function, if one is defined.
    * @param args
    *
@@ -26,7 +56,7 @@ public class JSInterface {
    * @param args
    *
    */
-  public function broadcastError(... args):void {
+  public static function broadcastError(... args):void {
     if (ExternalInterface.available) {
       var __incomingArgs:* = args as Array;
       var __newArgs:Array = [_jsErrorEventProxyName, ExternalInterface.objectID].concat(__incomingArgs);

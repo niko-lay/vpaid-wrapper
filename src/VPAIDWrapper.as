@@ -88,6 +88,13 @@ public class VPAIDWrapper extends Sprite {
       ExternalInterface.addCallback("resizeAd", onResizeAdCalled);
       ExternalInterface.addCallback("getProperty", onGetPropertyCalled);
       ExternalInterface.addCallback("setProperty", onSetPropertyCalled);
+      // Set custom names for callback functions if provided
+      if (loaderInfo.parameters.eventFunction != undefined) {
+        JSInterface.jsEventProxyName = loaderInfo.parameters.eventFunction;
+      }
+      if (loaderInfo.parameters.errorFunction != undefined) {
+        JSInterface.jsErrorEventProxyName = loaderInfo.parameters.errorFunction;
+      }
     } catch (e:SecurityError) {
       if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
         throw new SecurityError(e.message);
@@ -106,13 +113,13 @@ public class VPAIDWrapper extends Sprite {
     if (loaderInfo.parameters.readyFunction != undefined) {
       try {
         ExternalInterface.call(JSInterface.cleanEIString(loaderInfo.parameters.readyFunction), ExternalInterface.objectID);
+        _ready = true;
       } catch (e:Error) {
         if (loaderInfo.parameters.debug != undefined && loaderInfo.parameters.debug == "true") {
           throw new Error(e.message);
         }
       }
     }
-    _ready = true;
   }
 
   /**

@@ -3,6 +3,7 @@ package com.vpaidwrapper.vpaid {
 import com.vpaidwrapper.*;
 import com.vpaidwrapper.events.VPAIDEvent;
 import com.vpaidwrapper.events.VPAIDWrapperEvent;
+import com.vpaidwrapper.events.VPAIDWrapperErrorEvent;
 import com.vpaidwrapper.util.JSInterface;
 import com.vpaidwrapper.util.console;
 
@@ -21,8 +22,7 @@ public class AdContainer extends EventDispatcher {
 
   private static var _instance:AdContainer;
 
-  private var _ad:VPAID;
-  private var _adIsPlaying:Boolean = false;
+  private var _ad:VPAID = null;
 
   /**
    * Constructor.
@@ -97,10 +97,10 @@ public class AdContainer extends EventDispatcher {
     var loaderContext:LoaderContext = new LoaderContext();
     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAdUnitLoaded);
     loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (evt:SecurityErrorEvent):void {
-      //throwAdError('initError: Security error '+evt.text);
+      JSInterface.broadcastError(VPAIDWrapperErrorEvent.LOAD_ERROR, evt);
     });
     loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, function (evt:IOErrorEvent):void {
-      //throwAdError('initError: Error loading '+evt.text);
+      JSInterface.broadcastError(VPAIDWrapperErrorEvent.LOAD_ERROR, evt);
     });
     loader.load(new URLRequest(src), loaderContext);
   }
@@ -151,7 +151,6 @@ public class AdContainer extends EventDispatcher {
     _ad.removeEventListener(VPAIDEvent.AdImpression, adImpression);
     _ad.removeEventListener(VPAIDEvent.AdError, adError);
     _ad = null;
-    _adIsPlaying = false;
   }
 
   /** AD EVENT HANLDERS **/
@@ -171,7 +170,6 @@ public class AdContainer extends EventDispatcher {
    * @param event
    */
   private function adStarted(event:Event):void {
-    _adIsPlaying = true;
     JSInterface.broadcast(VPAIDEvent.AdStarted);
   }
 
@@ -180,8 +178,8 @@ public class AdContainer extends EventDispatcher {
    * @param event
    */
   public function adStopped(event:Event):void {
-    if (_adIsPlaying) {
-      clearCurrentAdUnit()
+    if (_ad !== null) {
+      clearCurrentAdUnit();
       JSInterface.broadcast(VPAIDEvent.AdStopped);
     }
   }
