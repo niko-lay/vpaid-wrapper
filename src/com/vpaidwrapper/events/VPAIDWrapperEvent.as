@@ -5,6 +5,7 @@ import flash.events.Event;
 public class VPAIDWrapperEvent extends Event {
   public static const READY:String = "VPAIDWrapperEvent.READY";
   public static const AD_LOADED:String = "VPAIDWrapperEvent.AD_LOADED";
+  public static const AD_DESTROYED:String = "VPAIDWrapperEvent.AD_DESTROYED";
   public static const STAGE_RESIZE:String = "VPAIDWrapperEvent.STAGE_RESIZE";
   private var _data:Object;
 

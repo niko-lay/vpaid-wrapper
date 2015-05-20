@@ -181,6 +181,7 @@ public class AdContainer extends EventDispatcher {
     if (_ad !== null) {
       clearCurrentAdUnit();
       JSInterface.broadcast(VPAIDEvent.AdStopped);
+      dispatchEvent(new VPAIDWrapperEvent(VPAIDWrapperEvent.AD_DESTROYED));
     }
   }
 

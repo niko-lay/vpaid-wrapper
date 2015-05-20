@@ -62,6 +62,7 @@ public class VPAIDWrapper extends Sprite {
     addChild(_app);
     // Notify wrapper's container when ad unit is ready to receive commands
     _app.model.addEventListener(VPAIDWrapperEvent.READY, onReady);
+    _app.model.addEventListener(VPAIDWrapperEvent.AD_DESTROYED, onAdDestroyed);
   }
 
   /**
@@ -83,9 +84,14 @@ public class VPAIDWrapper extends Sprite {
     try {
       ExternalInterface.addCallback("echo", onEchoCalled);
       ExternalInterface.addCallback("initAd", onInitAdCalled);
+      ExternalInterface.addCallback("resizeAd", onResizeAdCalled);
       ExternalInterface.addCallback("startAd", onStartAdCalled);
       ExternalInterface.addCallback("stopAd", onStopAdCalled);
-      ExternalInterface.addCallback("resizeAd", onResizeAdCalled);
+      ExternalInterface.addCallback("pauseAd", onPauseAdCalled);
+      ExternalInterface.addCallback("resumeAd", onResumeAdCalled);
+      ExternalInterface.addCallback("expandAd", onExpandAdCalled);
+      ExternalInterface.addCallback("collapseAd", onCollapseAdCalled);
+      ExternalInterface.addCallback("skipAd", onSkipAdCalled);
       ExternalInterface.addCallback("getProperty", onGetPropertyCalled);
       ExternalInterface.addCallback("setProperty", onSetPropertyCalled);
       // Set custom names for callback functions if provided
@@ -120,6 +126,14 @@ public class VPAIDWrapper extends Sprite {
         }
       }
     }
+  }
+
+  /**
+   * Fired when an ad unit is terminated.
+   * @param e
+   */
+  private function onAdDestroyed(e:Event):void {
+    _ready = false;
   }
 
   /**
@@ -205,6 +219,18 @@ public class VPAIDWrapper extends Sprite {
   }
 
   /**
+   * VPAID resizeAd method handler.
+   * @param width
+   * @param height
+   * @param viewMode
+   */
+  private function onResizeAdCalled(width:Number, height:Number, viewMode:String):void {
+    if (_ready) {
+      _app.model.ad.resizeAd(width, height, viewMode);
+    }
+  }
+
+  /**
    * VPAID startAd method handler.
    */
   private function onStartAdCalled():void {
@@ -223,14 +249,47 @@ public class VPAIDWrapper extends Sprite {
   }
 
   /**
-   * VPAID resizeAd method handler.
-   * @param width
-   * @param height
-   * @param viewMode
+   * VPAID pauseAd method handler.
    */
-  private function onResizeAdCalled(width:Number, height:Number, viewMode:String):void {
+  private function onPauseAdCalled():void {
     if (_ready) {
-      _app.model.ad.resizeAd(width, height, viewMode);
+      _app.model.ad.pauseAd();
+    }
+  }
+
+  /**
+   * VPAID resumeAd method handler.
+   */
+  private function onResumeAdCalled():void {
+    if (_ready) {
+      _app.model.ad.resumeAd();
+    }
+  }
+
+  /**
+   * VPAID expandAd method handler.
+   */
+  private function onExpandAdCalled():void {
+    if (_ready) {
+      _app.model.ad.expandAd();
+    }
+  }
+
+  /**
+   * VPAID collapseAd method handler.
+   */
+  private function onCollapseAdCalled():void {
+    if (_ready) {
+      _app.model.ad.collapseAd();
+    }
+  }
+
+  /**
+   * VPAID skipAd method handler.
+   */
+  private function onSkipAdCalled():void {
+    if (_ready) {
+      _app.model.ad.skipAd();
     }
   }
 
