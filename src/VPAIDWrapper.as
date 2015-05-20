@@ -187,11 +187,13 @@ public class VPAIDWrapper extends Sprite {
    * @param width
    * @param height
    * @param viewMode
-   * @param bitrate
+   * @param desiredBitrate
+   * @param creativeData
+   * @param environmentVars
    */
-  private function onInitAdCalled(width:Number, height:Number, viewMode:String, bitrate:Number):void {
+  private function onInitAdCalled(width:Number, height:Number, viewMode:String, desiredBitrate:Number, creativeData:String="", environmentVars:String=""):void {
     if (_ready) {
-      _app.model.ad.initAd(width, height, viewMode, bitrate);
+      _app.model.ad.initAd(width, height, viewMode, desiredBitrate, creativeData, environmentVars);
     }
   }
 
