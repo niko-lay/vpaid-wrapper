@@ -12,6 +12,7 @@ public interface IVPAID {
   function get adRemainingTime():Number;
   function get adDuration():Number;
   function get adVolume():Number;
+  function set adVolume(value:Number):void;
   function get adCompanions():String;
   function get adIcons():Boolean;
   // Methods

@@ -82,7 +82,9 @@ public class VPAIDWrapper extends Sprite {
    */
   private function registerExternalMethods():void {
     try {
+      // Debug methods
       ExternalInterface.addCallback("echo", onEchoCalled);
+      // VPAID methods
       ExternalInterface.addCallback("initAd", onInitAdCalled);
       ExternalInterface.addCallback("resizeAd", onResizeAdCalled);
       ExternalInterface.addCallback("startAd", onStartAdCalled);
@@ -92,8 +94,18 @@ public class VPAIDWrapper extends Sprite {
       ExternalInterface.addCallback("expandAd", onExpandAdCalled);
       ExternalInterface.addCallback("collapseAd", onCollapseAdCalled);
       ExternalInterface.addCallback("skipAd", onSkipAdCalled);
-      ExternalInterface.addCallback("getProperty", onGetPropertyCalled);
-      ExternalInterface.addCallback("setProperty", onSetPropertyCalled);
+      // Property getters/setters
+      ExternalInterface.addCallback("getAdLinear", onGetAdLinearCalled);
+      ExternalInterface.addCallback("getAdWidth", onGetAdWidthCalled);
+      ExternalInterface.addCallback("getAdHeight", onGetAdHeightCalled);
+      ExternalInterface.addCallback("getAdExpanded", onGetAdExpandedCalled);
+      ExternalInterface.addCallback("getAdSkippableState", onGetAdSkippableStateCalled);
+      ExternalInterface.addCallback("getAdRemainingTime", onGetAdRemainingTimeCalled);
+      ExternalInterface.addCallback("getAdDuration", onGetAdDurationCalled);
+      ExternalInterface.addCallback("getAdVolume", onGetAdVolumeCalled);
+      ExternalInterface.addCallback("setAdVolume", onSetAdVolumeCalled);
+      ExternalInterface.addCallback("getAdCompanions", onGetAdCompanionsCalled);
+      ExternalInterface.addCallback("getAdIcons", onGetAdIconsCalled);
       // Set custom names for callback functions if provided
       if (loaderInfo.parameters.eventFunction != undefined) {
         JSInterface.jsEventProxyName = loaderInfo.parameters.eventFunction;
@@ -293,26 +305,115 @@ public class VPAIDWrapper extends Sprite {
     }
   }
 
+  /** EXTERNAL PROPERTY GETTER/SETTERS **/
+
   /**
-   * External read access to VPAID object properties.
-   * @param pPropertyName
+   * adLinear property getter.
    * @return
    */
-  private function onGetPropertyCalled(pPropertyName:String = ""):* {
+  private function onGetAdLinearCalled():* {
     if (_ready) {
-      return _app.model.getAdProperty(pPropertyName);
+      return _app.model.ad.adLinear;
     }
-    return null;
   }
 
   /**
-   * External write access to VPAID object properties.
-   * @param pPropertyName
-   * @param pValue
+   * adWidth property getter.
+   * @return
    */
-  private function onSetPropertyCalled(pPropertyName:String = "", pValue:* = null):void {
+  private function onGetAdWidthCalled():* {
     if (_ready) {
-      _app.model.setAdProperty(pPropertyName, pValue);
+      return _app.model.ad.adWidth;
+    }
+  }
+
+  /**
+   * adHeight property getter.
+   * @return
+   */
+  private function onGetAdHeightCalled():* {
+    if (_ready) {
+      return _app.model.ad.adHeight;
+    }
+  }
+
+  /**
+   * adExpanded property getter.
+   * @return
+   */
+  private function onGetAdExpandedCalled():* {
+    if (_ready) {
+      return _app.model.ad.adExpanded;
+    }
+  }
+
+  /**
+   * adSkippableState property getter.
+   * @return
+   */
+  private function onGetAdSkippableStateCalled():* {
+    if (_ready) {
+      return _app.model.ad.adSkippableState;
+    }
+  }
+
+  /**
+   * adRemainingTime property getter.
+   * @return
+   */
+  private function onGetAdRemainingTimeCalled():* {
+    if (_ready) {
+      return _app.model.ad.adRemainingTime;
+    }
+  }
+
+  /**
+   * adDuration property getter.
+   * @return
+   */
+  private function onGetAdDurationCalled():* {
+    if (_ready) {
+      return _app.model.ad.adDuration;
+    }
+  }
+
+  /**
+   * adVolume property getter.
+   * @return
+   */
+  private function onGetAdVolumeCalled():* {
+    if (_ready) {
+      return _app.model.ad.adVolume;
+    }
+  }
+
+  /**
+   * adVolume property setter.
+   * @param value
+   */
+  private function onSetAdVolumeCalled(value:Number):void {
+    if (_ready) {
+      _app.model.ad.adVolume = value;
+    }
+  }
+
+  /**
+   * adCompanions property getter.
+   * @return
+   */
+  private function onGetAdCompanionsCalled():* {
+    if (_ready) {
+      return _app.model.ad.adCompanions;
+    }
+  }
+
+  /**
+   * adIcons property getter.
+   * @return
+   */
+  private function onGetAdIconsCalled():* {
+    if (_ready) {
+      return _app.model.ad.adIcons;
     }
   }
 }

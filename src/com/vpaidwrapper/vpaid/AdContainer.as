@@ -63,29 +63,6 @@ public class AdContainer extends EventDispatcher {
     return _ad;
   }
 
-  /**
-   * Provides external read access to VPAID object properties.
-   * @param propertyName
-   * @return
-   */
-  public function getAdProperty(propertyName:String):* {
-    if (_ad != null && _ad.hasOwnProperty(propertyName)) {
-      return _ad[propertyName];
-    }
-    return null;
-  }
-
-  /**
-   * Provides external write access to VPAID object properties.
-   * @param propertyName
-   * @param value
-   */
-  public function setAdProperty(propertyName:String = "", value:* = null):void {
-    if (_ad != null && _ad.hasOwnProperty(propertyName)) {
-      _ad[propertyName] = value;
-    }
-  }
-
   /** INITIALIZATION **/
 
   /**
