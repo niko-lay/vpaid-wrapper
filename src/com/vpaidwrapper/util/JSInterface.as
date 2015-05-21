@@ -90,10 +90,16 @@ public class JSInterface {
       return __sanitizedArray;
     } else if (typeof(obj) == 'object') {
       var __sanitizedObject:Object = new Object();
+      var __objectIsEmpty:Boolean = true;
       for (var __i in obj){
+        __objectIsEmpty = false;
         __sanitizedObject[__i] = cleanObject(obj[__i]);
       }
-      return __sanitizedObject;
+      if (__objectIsEmpty) {
+        return null;
+      } else {
+        return __sanitizedObject;
+      }
     } else {
       return obj;
     }
