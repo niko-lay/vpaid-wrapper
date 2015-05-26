@@ -48,10 +48,24 @@ public class WrapperView extends Sprite {
    * @param width
    * @param height
    */
-  private function resizeAdView(width:int, height:int):void {
+  private function resizeAdView(availableWidth:int, availableHeight:int):void {
     if (_adView != null) {
-      _adView.width = width;
-      _adView.height = height;
+      var nativeWidth:int = _adView.content.width;
+      var nativeHeight:int = _adView.content.height;
+      // First, size the whole thing down based on the available width
+      var targetWidth:int = availableWidth;
+      var targetHeight:int = targetWidth * (nativeHeight / nativeWidth);
+      // Calculate target dimensions
+      if (targetHeight > availableHeight) {
+        targetWidth = targetWidth * (availableHeight / targetHeight);
+        targetHeight = availableHeight;
+      }
+      // Set sprites new dimensions
+      _adView.width = targetWidth;
+      _adView.height = targetHeight;
+      // Update coordinates
+      _adView.x = Math.round((availableWidth - _adView.width) / 2);
+      _adView.y = Math.round((availableHeight - _adView.height) / 2);
     }
   }
 
