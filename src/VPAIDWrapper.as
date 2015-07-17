@@ -1,6 +1,7 @@
 package {
 
 import com.vpaidwrapper.WrapperApp;
+import com.vpaidwrapper.events.VPAIDEvent;
 import com.vpaidwrapper.events.VPAIDWrapperEvent;
 import com.vpaidwrapper.util.JSInterface;
 import com.vpaidwrapper.util.console;
@@ -11,6 +12,7 @@ import flash.display.StageScaleMode;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.TimerEvent;
+import flash.events.IEventDispatcher;
 import flash.external.ExternalInterface;
 import flash.geom.Rectangle;
 import flash.system.Security;
@@ -49,8 +51,7 @@ public class VPAIDWrapper extends Sprite {
     setUpContextMenu();
     // Uncaught event handler
     if (loaderInfo.hasOwnProperty("uncaughtErrorEvents")) {
-      // we'll want to suppress ANY uncaught debug errors in production (for the sake of ux)
-      // IEventDispatcher(loaderInfo["uncaughtErrorEvents"]).addEventListener("uncaughtError", onUncaughtError);
+      IEventDispatcher(loaderInfo["uncaughtErrorEvents"]).addEventListener("uncaughtError", onUncaughtError);
     }
     // Wire external callbacks
     if (ExternalInterface.available) {
@@ -154,6 +155,7 @@ public class VPAIDWrapper extends Sprite {
    */
   private function onUncaughtError(e:Event):void {
     e.preventDefault();
+    JSInterface.broadcast(VPAIDEvent.AdError, "Uncaught Error");
   }
 
   /** STAGE EVENTS **/

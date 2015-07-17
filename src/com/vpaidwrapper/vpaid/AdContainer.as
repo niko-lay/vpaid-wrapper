@@ -15,6 +15,8 @@ import flash.net.NetConnection;
 import flash.net.NetStream;
 import flash.net.URLRequest;
 import flash.system.LoaderContext;
+import flash.system.SecurityDomain;
+import flash.system.ApplicationDomain;
 
 import flash.external.ExternalInterface;
 
@@ -72,6 +74,8 @@ public class AdContainer extends EventDispatcher {
   public function loadAdUnit(src:String):void {
     var loader:Loader = new Loader();
     var loaderContext:LoaderContext = new LoaderContext();
+    loaderContext.applicationDomain = ApplicationDomain.currentDomain;
+    loaderContext.securityDomain = SecurityDomain.currentDomain;
     loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAdUnitLoaded);
     loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (evt:SecurityErrorEvent):void {
       JSInterface.broadcastError(VPAIDWrapperErrorEvent.LOAD_ERROR, evt);

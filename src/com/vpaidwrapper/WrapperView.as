@@ -87,7 +87,11 @@ public class WrapperView extends Sprite {
   private function onStageResize(e:VPAIDWrapperEvent):void {
     _stageWidth = e.data.width;
     _stageHeight = e.data.height;
-    resizeAdView(_stageWidth, _stageHeight);
+    try {
+      resizeAdView(_stageWidth, _stageHeight);
+    } catch (e:Error) {
+
+    }
   }
 }
 
